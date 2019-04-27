@@ -54,5 +54,5 @@ else
     MUTE_OPT=""
 fi
 
+pkill -RTMIN+10 i3blocks
 volnoti-show $MUTE_OPT $CURR_VOL
-

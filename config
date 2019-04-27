@@ -80,7 +80,7 @@ bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
-#bindsym $mod+Shift+space floating toggle
+bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
@@ -183,13 +183,20 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
+# New i3blocks bar
 bar {
     position top
-    status_command i3status -c "~/.i3/i3status.conf"
+    status_command i3blocks -c ".i3/i3blocks.conf"
     tray_output primary  # Show on primary display only
+    font pango:FontAwesome 12
 }
+
+# Original i3status bar
+#bar {
+#    #position bottom
+#    status_command i3status -c "~/.i3/i3status.conf"
+#    tray_output primary  # Show on primary display only
+#}
 
 
 # Set lock, logout, suspend, etc.
@@ -243,12 +250,9 @@ exec --no-startup-id xset s off -dpms
 
 ######################
 # Startup applications
-#exec --no-startup-id gnome-settings-daemon
 exec --no-startup-id xsettingsd
-#exec --no-startup-id gnome-do
 exec --no-startup-id dropbox start -i
-#exec --no-startup-id bumblebee-indicator
 exec --no-startup-id nm-applet
 exec --no-startup-id volnoti
-#exec --no-startup-id xinput map-to-output 'SYNAPTICS Synaptics Large Touch Screen' eDP1
 exec_always --no-startup-id killall dunst; dunst -config ~/.i3/dunstrc
+exec_always --no-startup-id ibus-daemon -drx
