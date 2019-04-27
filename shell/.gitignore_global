@@ -1,0 +1,14 @@
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*.bak
+*.iml
+peda-session-*.txt
+.project
+.cproject
+.settings
+.pydevproject
+.idea
+.gdb_history
+.vscode
