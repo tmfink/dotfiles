@@ -257,5 +257,6 @@ exec --no-startup-id xsettingsd
 exec --no-startup-id dropbox start -i
 exec --no-startup-id nm-applet
 exec --no-startup-id volnoti
+#exec_always --no-startup-id $HOME/.i3/launch_polybar.sh
 exec_always --no-startup-id killall dunst; dunst -config ~/.i3/dunstrc
 exec_always --no-startup-id ibus-daemon -drx
