@@ -1,108 +1,51 @@
-"Vundle
-set nocompatible              " be iMproved, required
-filetype off                  " required
+set nocompatible
+filetype off
 
+"Plug commands like :PlugInstall, ...
 
 if has('nvim')
     " NeoVim
-
-    " Hack to set TERM environment variable when in tmux
-    let $TERM='xterm256-color'
-
-	call plug#begin('~/.local/share/nvim/plugged')
-	"call plug#begin()
-	Plug 'tpope/vim-sensible'
-
-    Plug 'scrooloose/syntastic'
-    Plug 'vim-pandoc/vim-pandoc'
-    Plug 'vim-pandoc/vim-pandoc-syntax'
-    Plug 'kien/ctrlp.vim'
-    Plug 'scrooloose/nerdtree'
-    Plug 'jistr/vim-nerdtree-tabs'
-    Plug 'roxma/nvim-completion-manager'
-
-    " rust
-    Plug 'wting/rust.vim'
-    Plug 'racer-rust/vim-racer'
-    Plug 'roxma/nvim-cm-racer'
-
-
-    set shortmess+=c
-    inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-	" Language Server
-	Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
-
-	" (Optional) Multi-entry selection UI.
-	Plug 'junegunn/fzf'
-	" (Optional) Multi-entry selection UI.
-	Plug 'Shougo/denite.nvim'
-
-	" (Optional) Completion integration with deoplete.
-	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-	" (Optional) Completion integration with nvim-completion-manager.
-	Plug 'roxma/nvim-completion-manager'
-
-	" (Optional) Showing function signature and inline doc.
-	Plug 'Shougo/echodoc.vim'
-	call plug#end()
-
-	" Required for operations modifying multiple buffers like rename.
-	set hidden
-
-	let g:LanguageClient_serverCommands = {
-		\ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-		\ 'javascript': ['/opt/javascript-typescript-langserver/lib/language-server-stdio.js'],
-		\ }
-
-	" Automatically start language servers.
-	let g:LanguageClient_autoStart = 1
-
-	nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-	nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-	nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+    call plug#begin('~/.local/share/nvim/plugged')
+    "Plug 'roxma/nvim-completion-manager'
+    " Language Server
+    "Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
     " Vim
-    " set the runtime path to include Vundle and initialize
-
-    "set rtp+=~/.vim/bundle/Vundle.vim
-    "call vundle#begin()
     call plug#begin('~/.vim/plugged')
-
-    " alternatively, pass a path where Vundle should install plugins
-    "call vundle#begin('~/some/path/here')
-
-    " let Vundle manage Vundle, required
-    Plug 'gmarik/Vundle.vim'
-
-    " The following are examples of different formats supported.
-    " Keep Plugin commands between vundle#begin/end.
-    Plug 'scrooloose/syntastic'
-    Plug 'vim-pandoc/vim-pandoc'
-    Plug 'vim-pandoc/vim-pandoc-syntax'
-    Plug 'kien/ctrlp.vim'
-    Plug 'wting/rust.vim'
-    Plug 'racer-rust/vim-racer'
-    "Plug 'Valloric/YouCompleteMe'
-    "Plug 'scrooloose/nerdtree'
-    "Plug 'jistr/vim-nerdtree-tabs'
-
-    " All of your Plugins must be added before the following line
-    "call vundle#end()            " required
-    call plug#end()
-
-    "
-    " Brief help
-    " :PluginList       - lists configured plugins
-    " :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-    " :PluginSearch foo - searches for foo; append `!` to refresh local cache
-    " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-    "
-    " see :h vundle for more details or wiki for FAQ
-    " Put your non-Plugin stuff after this line
-
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
 endif
+
+"Common Vim/Neovim installs
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'rust-lang/rust.vim'
+Plug 'itchyny/lightline.vim'
+Plug 'w0rp/ale'
+Plug 'maximbaz/lightline-ale'
+
+" Language server plugins
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+" (Optional) Multi-entry selection UI.
+Plug 'junegunn/fzf'
+call plug#end()
+
+if !has('gui_running')
+    set t_Co=256
+endif
+
+if has('nvim')
+    "alacritty can't handle cursor reshaping?
+    set guicursor=
+else
+    " Vim
+endif
+
 
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
@@ -111,35 +54,15 @@ filetype plugin indent on    " required
 " Disable mouse support
 set mouse=
 
-"ctrlp.vim
-set runtimepath^=~/.vim/bundle/ctrlp.vim
 " Excluding version control directories
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*        " Linux/MacOSX
 set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*  " Windows ('noshellslash')
 
-"vim-racer
 set hidden
-let g:racer_cmd = "$HOME/.cargo/bin/racer"
-let $RUST_SRC_PATH="$HOME/workspace/rust/src/"
 
-
-"syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_mode_map = {
-    \ "mode": "passive",
-    \ "active_filetypes": [],
-    \ "passive_filetypes": [] }
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_error_symbol = "✗"
-let g:syntastic_warning_symbol = "⚠"
+"lightline: fix display
+set laststatus=2
+set noshowmode "do not need Vim's default bar
 
 if $TERMINAL_EMULATOR == "JetBrains-JediTerm"
     colorscheme default
@@ -147,9 +70,40 @@ else
     colorscheme torte
 endif
 
+"lightline support for ale
+let g:lightline = {}
+
+let g:lightline.component_expand = {
+      \  'linter_checking': 'lightline#ale#checking',
+      \  'linter_warnings': 'lightline#ale#warnings',
+      \  'linter_errors': 'lightline#ale#errors',
+      \  'linter_ok': 'lightline#ale#ok',
+      \ }
+let g:lightline.component_type = {
+      \     'linter_checking': 'left',
+      \     'linter_warnings': 'warning',
+      \     'linter_errors': 'error',
+      \     'linter_ok': 'left',
+      \ }
+let g:lightline.active = { 'right': [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]] }
+"let g:deoplete#enable_at_startup = 1 " enable deoplete for use with ale
+"let g:ale_completion_enabled = 1
+
+" Language server
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ }
+
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" Or map each action separately
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+
+
+
 set autoindent
 "set smartindent
-set hidden
 set wildmenu
 set hlsearch
 
@@ -168,32 +122,26 @@ set nowrap
 
 set ruler "show col/row
 
-"Override vim settings if necessary with file in current directory
-if filereadable(".project.vimrc")
-    source .project.vimrc
-endif
+"function ShowSpaces(...)
+"  let @/='\v(\s+$)|( +\ze\t)'
+"  let oldhlsearch=&hlsearch
+"  if !a:0
+"    let &hlsearch=!&hlsearch
+"  else
+"    let &hlsearch=a:1
+"  end
+"  return oldhlsearch
+"endfunction
 
-function ShowSpaces(...)
-  let @/='\v(\s+$)|( +\ze\t)'
-  let oldhlsearch=&hlsearch
-  if !a:0
-    let &hlsearch=!&hlsearch
-  else
-    let &hlsearch=a:1
-  end
-  return oldhlsearch
+"function StripSpaces() range
+"  let oldhlsearch=ShowSpaces(1)
+"  execute a:firstline.",".a:lastline."substitute ///gec"
+"  let &hlsearch=oldhlsearch
+"endfunction
+
+function! FindNonAscii()
+   /[^\x00-\x7F]
 endfunction
-
-function StripSpaces() range
-  let oldhlsearch=ShowSpaces(1)
-  execute a:firstline.",".a:lastline."substitute ///gec"
-  let &hlsearch=oldhlsearch
-endfunction
-
-"command -bar -nargs=? ShowSpaces call ShowSpaces(<args>)
-"command -bar -nargs=0 -range=% TrimSpaces <line1>,<line2>call TrimSpaces()
-
-let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
 
 set shell=/bin/bash
 
