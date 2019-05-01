@@ -6,6 +6,7 @@ TERMS="
     alacritty
     gnome-terminal
     terminator
+    terminal
     uxterm
     xterm
     "
