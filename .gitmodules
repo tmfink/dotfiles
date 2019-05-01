@@ -1,0 +1,9 @@
+[submodule "i3-wk-switch"]
+	path = i3-wk-switch
+	url = https://github.com/tmfink/i3-wk-switch
+[submodule "volnoti"]
+	path = volnoti
+	url = https://github.com/12qu/volnoti
+[submodule "light"]
+	path = light
+	url = https://github.com/haikarainen/light.git
