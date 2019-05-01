@@ -1,0 +1,63 @@
+# library for bashrc
+
+_THEME_GIT_PROMPT_PREFIX="(\[$(tput bold)$(tput setaf 2)\]"
+_THEME_GIT_PROMPT_SUFFIX=")"
+_THEME_GIT_PROMPT_DIRTY=" \[$(tput setaf 2)$(tput setaf 3)\]✗\[$(tput sgr0)\]"
+_THEME_GIT_PROMPT_CLEAN="\[$(tput sgr0)\]"
+
+function _bash_escape() {
+  local output="$1"
+  local lb=$(echo -e "\001")
+  local rb=$(echo -e "\002")
+  output="${output//\\[/$lb}"
+  output="${output//\\]/$rb}"
+  echo "$output"
+}
+
+# Outputs current branch info in prompt format
+function git_prompt_info() {
+  local ref
+  local output
+  ref=$(command git symbolic-ref HEAD 2> /dev/null) ||
+      ref=$(command git rev-parse --short HEAD 2> /dev/null) ||
+      return 0
+  output="$_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$_THEME_GIT_PROMPT_SUFFIX"
+  echo "$(_bash_escape "$output")"
+}
+
+# Checks if working tree is dirty
+function parse_git_dirty() {
+  local STATUS=''
+  local -a FLAGS
+  FLAGS=('--porcelain')
+  if [[ $POST_1_7_2_GIT -gt 0 ]]; then
+    FLAGS+=('--ignore-submodules=dirty')
+  fi
+  if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
+    FLAGS+=('--untracked-files=no')
+  fi
+  STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
+  if [[ -n $STATUS ]]; then
+    echo "$_THEME_GIT_PROMPT_DIRTY"
+  else
+    echo "$_THEME_GIT_PROMPT_CLEAN"
+  fi
+}
+
+# Outputs the name of the current branch
+# Usage example: git pull origin $(git_current_branch)
+# Using '--quiet' with 'symbolic-ref' will not cause a fatal error (128) if
+# it's not a symbolic ref, but in a Git repo.
+function git_current_branch() {
+  local ref
+  ref=$(command git symbolic-ref --quiet HEAD 2> /dev/null)
+  local ret=$?
+  if [[ $ret != 0 ]]; then
+    [[ $ret == 128 ]] && return  # no git repo.
+    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
+  fi
+  echo ${ref#refs/heads/}
+}
+
+# This is unlikely to change so make it all statically assigned
+POST_1_7_2_GIT=1
