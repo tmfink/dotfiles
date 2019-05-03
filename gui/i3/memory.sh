@@ -20,14 +20,8 @@ awk -v type=$TYPE '
 /^MemTotal:/ {
 	mem_total=$2
 }
-/^MemFree:/ {
-	mem_free=$2
-}
-/^Buffers:/ {
-	mem_free+=$2
-}
-/^Cached:/ {
-	mem_free+=$2
+/^MemAvailable:/ {
+	mem_avail=$2
 }
 /^SwapTotal:/ {
 	swap_total=$2
@@ -41,9 +35,10 @@ END {
 		used=(swap_total-swap_free)/1024/1024
 		total=swap_total/1024/1024
 	} else {
-		free=mem_free/1024/1024
-		used=(mem_total-mem_free)/1024/1024
-		total=mem_total/1024/1024
+        # This is how libgtop calculates free mem (used by
+        # gnome-system-monitor)
+		used=(mem_total-mem_avail)/1048576
+		total=mem_total/1048576
 	}
 
 	pct=0
@@ -52,7 +47,7 @@ END {
 	}
 
 	# full text
-	printf("%.1f/%.1fGB\n", used, total)
+	printf("%.1f/%.1fɢʙ\n", used, total)
 
 	# short text
 	printf("%.f%%\n", pct)
