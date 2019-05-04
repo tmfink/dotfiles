@@ -3,6 +3,12 @@ filetype off
 
 "Plug commands like :PlugInstall, ...
 
+" To configure Neovim:
+" $ cat ~/.config/nvim/init.vim
+" set runtimepath^=~/.vim runtimepath+=~/.vim/after
+" let &packpath=&runtimepath
+" source ~/.vimrc
+
 if has('nvim')
     " NeoVim
     call plug#begin('~/.local/share/nvim/plugged')
@@ -71,23 +77,33 @@ else
 endif
 
 "lightline support for ale
-let g:lightline = {}
+let g:lightline = {
+    \ 'component': {
+        \ 'charvaluehex': '0x%B'
+    \ },
+\ }
 
 let g:lightline.component_expand = {
-      \  'linter_checking': 'lightline#ale#checking',
-      \  'linter_warnings': 'lightline#ale#warnings',
-      \  'linter_errors': 'lightline#ale#errors',
-      \  'linter_ok': 'lightline#ale#ok',
-      \ }
+    \  'linter_checking': 'lightline#ale#checking',
+    \  'linter_warnings': 'lightline#ale#warnings',
+    \  'linter_errors': 'lightline#ale#errors',
+    \  'linter_ok': 'lightline#ale#ok',
+    \ }
 let g:lightline.component_type = {
-      \     'linter_checking': 'left',
-      \     'linter_warnings': 'warning',
-      \     'linter_errors': 'error',
-      \     'linter_ok': 'left',
-      \ }
-let g:lightline.active = { 'right': [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]] }
-"let g:deoplete#enable_at_startup = 1 " enable deoplete for use with ale
-"let g:ale_completion_enabled = 1
+    \  'linter_checking': 'left',
+    \  'linter_warnings': 'warning',
+    \  'linter_errors': 'error',
+    \  'linter_ok': 'left',
+    \ }
+let g:lightline.active = {
+    \ 'right': [
+        \ [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
+        \ [ 'lineinfo' ],
+        \ [ 'percent' ],
+    \ ]
+\ }
+let g:deoplete#enable_at_startup = 1 " enable deoplete for use with ale
+let g:ale_completion_enabled = 1
 
 " Language server
 let g:LanguageClient_serverCommands = {
@@ -121,6 +137,15 @@ set nocompatible " turn off emulation of vi bugs
 set nowrap
 
 set ruler "show col/row
+
+"show trailing whitespace
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
 
 "function ShowSpaces(...)
 "  let @/='\v(\s+$)|( +\ze\t)'
