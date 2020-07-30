@@ -102,7 +102,7 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 else
     case "$(uname)" in
-    Darwin)
+    Darwin|*BSD)
         alias ls="$LS -FG"
         export CLICOLOR=1
         ;;
