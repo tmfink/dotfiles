@@ -68,7 +68,7 @@ fi
 if [ "$color_prompt" = yes ]; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]'"$PS1_REMOTE"':\[\033[01;34m\]\w\[\033[00m\]$(git_prompt_info)\$ '
 else
-    PS1="$PS1_REMOTE"'${debian_chroot:+($debian_chroot)}\u@\h'"$PS1_REMOTE"':\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h'"$PS1_REMOTE"':\w\$ '
 fi
 unset color_prompt force_color_prompt
 
