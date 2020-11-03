@@ -232,6 +232,8 @@ for_window [class="^Technic Launcher$"] floating enable
 for_window [instance="Godot_Engine"] floating enable
 for_window [title=".*Godot Engine*."] floating disable
 
+for_window [class="Skype" id=69206146 instance="skype" title="Skype" window_role="browser-window"] floating enable
+
 # Set background to gray
 exec --no-startup-id xsetroot -solid "#333333"
 
