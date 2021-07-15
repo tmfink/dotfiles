@@ -104,7 +104,7 @@ bindsym Control+$mod+9 workspace 9
 bindsym Control+$mod+0 workspace 10
 
 # switch to workspace (xmonad)
-set $x_switch exec --no-startup-id ~/.i3/i3-wk-switch/i3-wk-switch.py
+set $x_switch exec --no-startup-id python3 ~/.i3/i3-wk-switch/i3-wk-switch.py
 bindsym $mod+1 $x_switch 1
 bindsym $mod+2 $x_switch 2
 bindsym $mod+3 $x_switch 3
@@ -232,7 +232,7 @@ for_window [class="^Technic Launcher$"] floating enable
 for_window [instance="Godot_Engine"] floating enable
 for_window [title=".*Godot Engine*."] floating disable
 
-for_window [class="Skype" id=69206146 instance="skype" title="Skype" window_role="browser-window"] floating enable
+for_window [class="Skype" window_role="browser-window"] floating enable
 
 # Set background to gray
 exec --no-startup-id xsetroot -solid "#333333"
