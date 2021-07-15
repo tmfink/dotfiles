@@ -29,15 +29,26 @@ awk -v type=$TYPE '
 /^SwapFree:/ {
 	swap_free=$2
 }
+/^MemFree:/ {
+	mem_free=$2
+}
+/^Cached:/ {
+	mem_cached=$2
+}
+/^SReclaimable:/ {
+	mem_reclaimable=$2
+}
+/^Buffers:/ {
+	buffers=$2
+}
 END {
 	if (type == "swap") {
 		free=swap_free/1024/1024
 		used=(swap_total-swap_free)/1024/1024
 		total=swap_total/1024/1024
 	} else {
-        # This is how libgtop calculates free mem (used by
-        # gnome-system-monitor)
-		used=(mem_total-mem_avail)/1048576
+        # This is how procps free calculates free mem
+		used=(mem_total - mem_free - mem_cached - mem_reclaimable - buffers) / 1048576
 		total=mem_total/1048576
 	}
 
