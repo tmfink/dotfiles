@@ -9,7 +9,7 @@ set -euo pipefail
 
 ##########
 # Set to name of main display
-MAIN_MONITOR="${MAIN_MONITOR:-eDP-1}"
+MAIN_MONITOR="${MAIN_MONITOR:-eDP}"
 ##########
 
 usage() {
@@ -79,4 +79,4 @@ case $NUM_ACTIVE_OUTPUTS in
 esac
 
 # Set touch screen
-xinput map-to-output 'SYNAPTICS Synaptics Large Touch Screen' "$MAIN"
+#xinput map-to-output 'SYNAPTICS Synaptics Large Touch Screen' "$MAIN"
