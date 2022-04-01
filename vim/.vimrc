@@ -14,12 +14,10 @@ if has('nvim')
     call plug#begin('~/.local/share/nvim/plugged')
     "Plug 'roxma/nvim-completion-manager'
     " Language Server
-    "Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 else
     " Vim
     call plug#begin('~/.vim/plugged')
-    Plug 'Shougo/deoplete.nvim'
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
@@ -31,14 +29,17 @@ Plug 'rust-lang/rust.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'w0rp/ale'
 Plug 'maximbaz/lightline-ale'
+Plug 'editorconfig/editorconfig-vim'
 
 " Language server plugins
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-" (Optional) Multi-entry selection UI.
-Plug 'junegunn/fzf'
+"Plug 'autozimu/LanguageClient-neovim', {
+"    \ 'branch': 'next',
+"    \ 'do': 'bash install.sh',
+"    \ }
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 call plug#end()
 
 if !has('gui_running')
@@ -102,12 +103,14 @@ let g:lightline.active = {
         \ [ 'percent' ],
     \ ]
 \ }
-let g:deoplete#enable_at_startup = 1 " enable deoplete for use with ale
-let g:ale_completion_enabled = 1
+let g:ale_lint_on_text_changed = 'never' "do not lint on text changes
+let g:ale_lint_on_enter = 0 "do not lint on text change
+"let g:ale_completion_enabled = 1
+let g:ale_auto_complete_delay = 200
 
 " Language server
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'rust': ['rust-analyzer'],
     \ }
 
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
@@ -174,3 +177,6 @@ set shell=/bin/bash
 set listchars+=tab:^-
 set listchars+=trail:`
 
+
+"FZF
+nnoremap <silent> <C-p> :Files<CR>
