@@ -83,7 +83,12 @@ esac
 
 export TERM="xterm-256color"
 
-EXA="$HOME/.cargo/bin/exa"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="/usr/local/go/bin:$PATH"
+export PATH="$HOME/apps/android-platform-tools:$PATH"
+export PATH="$HOME/bin:$PATH"
+
+EXA="$(which exa 2>/dev/null)"
 if [ -f "$EXA" ]; then
     LS="$EXA"
 else
@@ -102,10 +107,13 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 else
     case "$(uname)" in
-    Darwin|*BSD)
+    Darwin|FreeBSD)
         alias ls="$LS -FG"
         export CLICOLOR=1
         ;;
+    *BSD)
+        alias ls="$LS -F"
+       ;;
     esac
 fi
 
