@@ -1,0 +1,18 @@
+#!/bin/sh
+# Paste from system clipboard to stdout
+
+set -eu
+
+UNAME=$(uname)
+case "$UNAME" in
+Linux)
+    exec xclip -selection clipboard -o "$@"
+    ;;
+Darwin)
+    exec pbpaste "$@"
+    ;;
+*)
+    echo "pbcopy not implemented for $UNAME"
+esac
+
+exit 1

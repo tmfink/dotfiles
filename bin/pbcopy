@@ -1,0 +1,18 @@
+#!/bin/sh
+# Copy from file/stdin to the system clipboard
+
+set -eu
+
+UNAME=$(uname)
+case "$UNAME" in
+Linux)
+    exec xclip -selection clipboard -i "$@"
+    ;;
+Darwin)
+    exec pbcopy "$@"
+    ;;
+*)
+    echo "pbcopy not implemented for $UNAME"
+esac
+
+exit 1
