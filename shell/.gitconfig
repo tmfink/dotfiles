@@ -12,3 +12,5 @@
 [rebase]
 	instructionFormat = (%an <%ae>) %s
 [commit]
+[pull]
+	rebase = false
