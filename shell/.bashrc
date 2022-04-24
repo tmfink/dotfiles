@@ -133,6 +133,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
+export PATH="$HOME/osxcross-prefix/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
 export PATH="$HOME/apps/android-platform-tools:$PATH"
