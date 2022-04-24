@@ -14,7 +14,7 @@ exec_always --no-startup-id xrdb -merge ~/.Xresources
 # is used in the bar {} block below.
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
-font pango:DejaVu Sans Mono 12
+font pango:DejaVu Sans Mono 11
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
@@ -148,8 +148,8 @@ bindsym XF86AudioLowerVolume exec ~/.i3/i3audio.sh dec
 bindsym XF86AudioMute exec ~/.i3/i3audio.sh mute
 
 # Brightness keys
-bindsym XF86MonBrightnessDown exec light -U 5
-bindsym XF86MonBrightnessUp exec light -A 5
+bindsym XF86MonBrightnessDown exec ~/.i3/dbus-screen-brightness.sh down
+bindsym XF86MonBrightnessUp exec ~/.i3/dbus-screen-brightness.sh up
 
 # Auto detect monitors/outputs
 bindsym $mod+Shift+d exec --no-startup-id ~/.i3/auto_monitor.sh
@@ -241,10 +241,10 @@ exec --no-startup-id xsetroot -solid "#333333"
 ### Touchpad options
 
 # Disable touchpad "touch click"
-exec --no-startup-id xinput --set-prop 'SynPS/2 Synaptics TouchPad' 'Synaptics Tap Time' 0
+#exec --no-startup-id xinput --set-prop 'SynPS/2 Synaptics TouchPad' 'Synaptics Tap Time' 0
 
 # Disable edge scroll
-exec --no-startup-id xinput --set-prop 'SynPS/2 Synaptics TouchPad' 'Synaptics Edge Scrolling' 0 0 0
+#exec --no-startup-id xinput --set-prop 'SynPS/2 Synaptics TouchPad' 'Synaptics Edge Scrolling' 0 0 0
 
 # Enable 2 finger horz scrolling
 #exec --no-startup-id synclient HorizTwoFingerScroll=1
@@ -255,10 +255,15 @@ exec --no-startup-id xset s off -dpms
 
 ######################
 # Startup applications
-exec --no-startup-id xsettingsd
 exec --no-startup-id dropbox start -i
 exec --no-startup-id nm-applet
 exec --no-startup-id volnoti
 #exec_always --no-startup-id $HOME/.i3/launch_polybar.sh
 exec_always --no-startup-id killall dunst; dunst -config ~/.i3/dunstrc
 exec_always --no-startup-id ibus-daemon -drx
+
+# gnome
+#exec --no-startup-id /usr/bin/gnome-screensaver
+#exec --no-startup-id gnome-flashback
+#exec --no-startup-id /usr/libexec/gsd-xsettings
+#exec --no-startup-id xsettingsd
