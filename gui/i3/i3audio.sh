@@ -35,8 +35,8 @@ case "$1" in
         $AMIXER ${VOL_INCREMENT}-
         unmute
         ;;
-    mute) 
-       pactl set-sink-mute @DEFAULT_SINK@ toggle 
+    mute)
+       pactl set-sink-mute @DEFAULT_SINK@ toggle
        ;;
     *)
         echo "Usage: $0 {inc|dec|mute}"
