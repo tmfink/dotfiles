@@ -4,6 +4,3 @@
 [submodule "light"]
 	path = gui/i3/light
 	url = https://github.com/haikarainen/light.git
-[submodule "gui/i3/volnoti"]
-	path = gui/i3/volnoti
-	url = https://github.com/12qu/volnoti
