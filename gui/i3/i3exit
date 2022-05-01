@@ -1,12 +1,19 @@
 #!/bin/sh
+
+set -eu
+
+# todo: test XDG_SESSION_DESKTOP
+# https://askubuntu.com/questions/72549/how-to-determine-which-window-manager-is-running
 lock() {
     # causes "double lock" in some cases, so use i3lock for now
     # dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock
+    #i3lock -c 0989b0
 
-    i3lock -c 0989b0
+    qdbus org.kde.ksmserver /ScreenSaver org.freedesktop.ScreenSaver.Lock
+
 }
 
-case "$1" in
+case "${1:-}" in
     lock)
         lock
         ;;
@@ -14,7 +21,11 @@ case "$1" in
         i3-msg exit
         ;;
     suspend)
-        lock && sudo pm-suspend
+        #lock && sudo pm-suspend
+        #dbus-send --print-reply --dest='org.freedesktop.PowerManagement' /org/freedesktop/PowerManagement org.freedesktop.PowerManagement.Suspend
+
+        # Causes issues on KDE? Possible that power settings disable this when plugged in.
+        #qdbus org.freedesktop.PowerManagement /org/freedesktop/PowerManagement org.freedesktop.PowerManagement.Suspend
         ;;
     hibernate)
         lock && systemctl hibernate
@@ -28,6 +39,5 @@ case "$1" in
     *)
         echo "Usage: $0 {lock|logout|suspend|hibernate|reboot|shutdown}"
         exit 2
+        ;;
 esac
-
-exit 0

@@ -5,6 +5,7 @@ TERMS="
     noexec
     alacritty
     gnome-terminal
+    konsole
     terminator
     terminal
     uxterm

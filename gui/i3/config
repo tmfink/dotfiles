@@ -143,13 +143,20 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # Media, sound, audio keys
-bindsym XF86AudioRaiseVolume exec ~/.i3/i3audio.sh inc
-bindsym XF86AudioLowerVolume exec ~/.i3/i3audio.sh dec
-bindsym XF86AudioMute exec ~/.i3/i3audio.sh mute
+#bindsym XF86AudioRaiseVolume exec ~/.i3/i3audio.sh inc
+#bindsym XF86AudioLowerVolume exec ~/.i3/i3audio.sh dec
+#bindsym XF86AudioMute exec ~/.i3/i3audio.sh mute
+
+# KDE Plasma audio
+bindsym XF86AudioRaiseVolume exec --no-startup-id qdbus org.kde.kglobalaccel /component/kmix invokeShortcut "increase_volume"
+bindsym XF86AudioLowerVolume exec --no-startup-id qdbus org.kde.kglobalaccel /component/kmix invokeShortcut "decrease_volume"
+bindsym XF86AudioMute exec --no-startup-id qdbus org.kde.kglobalaccel /component/kmix invokeShortcut "mute"
+bindsym XF86AudioMicMute exec --no-startup-id qdbus org.kde.kglobalaccel /component/kmix invokeShortcut "mic_mute"
 
 # Brightness keys
-bindsym XF86MonBrightnessDown exec ~/.i3/dbus-screen-brightness.sh down
-bindsym XF86MonBrightnessUp exec ~/.i3/dbus-screen-brightness.sh up
+# (KDE handles automatically if i3 does not intercept the keypress)
+#bindsym XF86MonBrightnessDown exec ~/.i3/dbus-screen-brightness.sh down
+#bindsym XF86MonBrightnessUp exec ~/.i3/dbus-screen-brightness.sh up
 
 # Auto detect monitors/outputs
 bindsym $mod+Shift+d exec --no-startup-id ~/.i3/auto_monitor.sh
@@ -217,7 +224,7 @@ bar {
 bindsym Control+$mod+l exec --no-startup-id ~/.i3/i3exit lock
 bindsym Control+Shift+$mod+s exec --no-startup-id ~/.i3/i3exit suspend
 
-bindsym Control+$mod+n exec --no-startup-id sudo systemctl restart network-manager.service
+#bindsym Control+$mod+n exec --no-startup-id sudo systemctl restart network-manager.service
 
 
 #######################
@@ -237,6 +244,25 @@ for_window [class="Skype" window_role="browser-window"] floating enable
 # Set background to gray
 exec --no-startup-id xsetroot -solid "#333333"
 
+#### KDE Plasma
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="task_dialog"] floating enable
+
+for_window [class="yakuake"] floating enable
+for_window [class="systemsettings"] floating enable
+for_window [class="plasmashell"] floating enable;
+for_window [class="Plasma"] floating enable; border none
+for_window [title="plasma-desktop"] floating enable; border none
+for_window [class="krunner"] floating enable; border none
+for_window [class="Kmix"] floating enable; border none
+for_window [class="Klipper"] floating enable; border none
+for_window [class="Plasmoidviewer"] floating enable; border none
+for_window [class="(?i)*nextcloud*"] floating disable
+for_window [class="plasmashell" window_type="notification"] border none, move right 700px, move down 450px
+no_focus [class="plasmashell" window_type="notification"]
+
+for_window [title="Desktop — Plasma"] kill; floating enable; border none
+
 ######################
 ### Touchpad options
 
@@ -250,20 +276,23 @@ exec --no-startup-id xsetroot -solid "#333333"
 #exec --no-startup-id synclient HorizTwoFingerScroll=1
 
 # Disable screen sleeping
-exec --no-startup-id xset s off -dpms
+#exec --no-startup-id xset s off -dpms
 
 
 ######################
 # Startup applications
 exec --no-startup-id dropbox start -i
-exec --no-startup-id nm-applet
-exec --no-startup-id volnoti
+exec_always --no-startup-id killall feh; feh --bg-scale /usr/share/wallpapers/Next/contents/images/1920x1080.jpg
 #exec_always --no-startup-id $HOME/.i3/launch_polybar.sh
-exec_always --no-startup-id killall dunst; dunst -config ~/.i3/dunstrc
-exec_always --no-startup-id ibus-daemon -drx
 
-# gnome
+# Gnome
 #exec --no-startup-id /usr/bin/gnome-screensaver
 #exec --no-startup-id gnome-flashback
 #exec --no-startup-id /usr/libexec/gsd-xsettings
 #exec --no-startup-id xsettingsd
+
+# Vanilla-only (i3 w/o desktop environment)
+#exec --no-startup-id volnoti
+#exec --no-startup-id nm-applet
+#exec_always --no-startup-id killall dunst; dunst -config ~/.i3/dunstrc
+#exec_always --no-startup-id ibus-daemon -drx
