@@ -158,6 +158,11 @@ export TIME_STYLE=long-iso
 set -o vi
 bind -m vi-insert "\C-l":clear-screen
 
+if vim --version >& /dev/null ; then
+    export EDITOR=vim
+    export VISUAL="${EDITOR}"
+fi
+
 
 # Use openssh ssh agent instead of gnome
 eval $(ssh-agent.sh)
