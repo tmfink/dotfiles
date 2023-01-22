@@ -6,7 +6,10 @@ set -eu
 UNAME=$(uname)
 case "$UNAME" in
 Linux)
-    exec xclip -selection clipboard -o "$@"
+    xclip -selection clipboard -o "$@"
+    # make sure we get the trailing newline
+    echo
+    exit 0
     ;;
 Darwin)
     exec pbpaste "$@"
