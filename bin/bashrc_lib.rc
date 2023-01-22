@@ -14,10 +14,33 @@ function _bash_escape() {
   echo "$output"
 }
 
+# Avoiding time consuming git commands
+function git_prompt_disable() {
+  export DISABLE_GIT_PROMPT=1
+}
+
+function git_prompt_enable() {
+  export DISABLE_GIT_PROMPT=
+}
+
 # Outputs current branch info in prompt format
 function git_prompt_info() {
   local ref
   local output
+  local status
+
+  if [ "${DISABLE_GIT_PROMPT}" ]; then
+    if command git rev-parse --short HEAD >& /dev/null ; then
+      status=""
+      output="${_THEME_GIT_PROMPT_PREFIX}${status}${_THEME_GIT_PROMPT_CLEAN}${_THEME_GIT_PROMPT_SUFFIX}"
+    else
+      status=""
+      output="${status}${_THEME_GIT_PROMPT_CLEAN}"
+    fi
+    echo "$(_bash_escape "$output")"
+    return
+  fi
+
   ref=$(command git symbolic-ref HEAD 2> /dev/null) ||
       ref=$(command git rev-parse --short HEAD 2> /dev/null) ||
       return 0
