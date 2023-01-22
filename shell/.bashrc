@@ -86,6 +86,7 @@ export TERM="xterm-256color"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
 export PATH="$HOME/apps/android-platform-tools:$PATH"
+export PATH="$HOME/apps/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 
 EXA="$(which exa 2>/dev/null)"
