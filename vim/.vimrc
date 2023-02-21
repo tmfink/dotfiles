@@ -171,7 +171,13 @@ function! FindNonAscii()
    /[^\x00-\x7F]
 endfunction
 
-set shell=/bin/bash
+for shell_cand in ["bash", "zsh", "sh"]
+    let output=trim(system("which " . shell_cand))
+    if len(output) > 0 && filereadable(output)
+        let &shell=output
+        break
+    endif
+endfor
 
 " Make "show list" more useful.
 set listchars+=tab:^-
