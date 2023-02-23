@@ -19,6 +19,27 @@ if has('nvim')
     call plug#begin('~/.local/share/nvim/plugged')
 
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+    " ==== BEGIN: LSP Support w/ lsp-zero ====
+    " LSP Support
+    Plug 'neovim/nvim-lspconfig'             " Required
+    Plug 'williamboman/mason.nvim'           " Optional
+    Plug 'williamboman/mason-lspconfig.nvim' " Optional
+
+    " Autocompletion Engine
+    Plug 'hrsh7th/nvim-cmp'         " Required
+    Plug 'hrsh7th/cmp-nvim-lsp'     " Required
+    Plug 'hrsh7th/cmp-buffer'       " Optional
+    Plug 'hrsh7th/cmp-path'         " Optional
+    Plug 'saadparwaiz1/cmp_luasnip' " Optional
+    Plug 'hrsh7th/cmp-nvim-lua'     " Optional
+
+    "  Snippets
+    Plug 'L3MON4D3/LuaSnip'             " Required
+    Plug 'rafamadriz/friendly-snippets' " Optional
+
+    Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
+    " ==== END: LSP Support w/ lsp-zero ====
 else
     " Vim
     " Install vim-plug with:
@@ -205,5 +226,17 @@ lua << EOF
     additional_vim_regex_highlighting = false,
   },
 }
+
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+-- (Optional) Configure lua language server for neovim
+lsp.nvim_workspace()
+
+lsp.setup()
 EOF
 endif "nvim
