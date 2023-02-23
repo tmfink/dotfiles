@@ -12,7 +12,8 @@ filetype on
 if has('nvim')
     " NeoVim
     " Install vim-plug with:
-    " curl -fLo ~/.local/share"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    " curl -fLo ~/.local/share"/nvim/site/autoload/plug.vim --create-dirs \
+    "     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     "
     " debug with :checkhealth
     call plug#begin('~/.local/share/nvim/plugged')
@@ -21,7 +22,8 @@ if has('nvim')
 else
     " Vim
     " Install vim-plug with:
-    " curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    " curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    "     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     call plug#begin('~/.vim/plugged')
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
