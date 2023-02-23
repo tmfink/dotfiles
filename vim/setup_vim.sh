@@ -14,20 +14,53 @@ Mydir="$(dirname -- "$0")"
 echo "Running for user ${USER}"
 id
 
+abs_path() {
+    dir_abs="$(cd "$(dirname -- "$1")" && pwd)"
+    echo "${dir_abs}/$(basename -- "$1")"
+}
+
+rel_path() {
+    python3 -c '
+import os.path
+import sys
+
+print(os.path.relpath(sys.argv[1], sys.argv[2]))
+' "$@"
+}
+
+link_vimrc() {
+    local src="$(abs_path "$1")"; shift
+    local dst="$(abs_path "$1")"; shift
+
+    local dst_dir="$(dirname -- "${dst}")"
+    local dst_base="$(basename -- "${dst}")"
+
+    local rel_dst="$(rel_path "${src}" "${dst_dir}")"
+    [ $? -eq 0 ] || Error "Failed to compute relative path"
+
+    if [ -L "${dst}" ]; then
+        echo "Symlink ${dst} already exists, nothing to do"
+    elif [ -e "${dst}" ]; then
+        Error "Non-symlink file ${dst} already exists; manually resolve/backup"
+    else
+        echo "Creating symlink ${src} -> ${dst}"
+        (cd "${dst_dir}" && ln -s "${rel_dst}" "${dst_base}" ) \
+            || Error "Failed to create symlink"
+    fi
+}
+
 # Install Vim config
 echo "Symlinking .vimrc"
 DOTFILES_VIMRC="${Mydir}/.vimrc"
 HOME_VIMRC="${HOME}/.vimrc"
-[ -L "${HOME_VIMRC}" ] \
-    || ln -s "${DOTFILES_VIMRC}" "${HOME_VIMRC}"
+link_vimrc "${DOTFILES_VIMRC}" "${HOME_VIMRC}"
 
 # Install Neovim config
 echo "Symlinking neovim config"
 HOME_NVIMRC="${HOME}/.config/nvim/init.vim"
 NVIM_HOME="$(dirname -- ${HOME_NVIMRC})"
 mkdir -p "${NVIM_HOME}"
-[ -L "${HOME_NVIMRC}" ] \
-    || ln -s "${HOME_VIMRC}" "${HOME_NVIMRC}"
+link_vimrc "${HOME_VIMRC}" "${HOME_NVIMRC}"
 
 # Install Plug for vim and neovim
 echo "Installing Plug"
