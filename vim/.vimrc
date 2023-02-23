@@ -1,5 +1,5 @@
 set nocompatible
-filetype off
+filetype on
 
 "Plug commands like :PlugInstall, ...
 
@@ -11,12 +11,20 @@ filetype off
 
 if has('nvim')
     " NeoVim
+    " Install vim-plug with:
+    " curl -fLo ~/.local/share"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    "
+    " debug with :checkhealth
     call plug#begin('~/.local/share/nvim/plugged')
     "Plug 'roxma/nvim-completion-manager'
     " Language Server
     Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 else
     " Vim
+    " Install vim-plug with:
+    " curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     call plug#begin('~/.vim/plugged')
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
@@ -27,16 +35,8 @@ Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'rust-lang/rust.vim'
 Plug 'itchyny/lightline.vim'
-Plug 'w0rp/ale'
-Plug 'maximbaz/lightline-ale'
 Plug 'editorconfig/editorconfig-vim'
 
-" Language server plugins
-"Plug 'autozimu/LanguageClient-neovim', {
-"    \ 'branch': 'next',
-"    \ 'do': 'bash install.sh',
-"    \ }
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -77,19 +77,11 @@ else
     colorscheme torte
 endif
 
-"lightline support for ale
 let g:lightline = {
     \ 'component': {
         \ 'charvaluehex': '0x%B'
     \ },
 \ }
-
-let g:lightline.component_expand = {
-    \  'linter_checking': 'lightline#ale#checking',
-    \  'linter_warnings': 'lightline#ale#warnings',
-    \  'linter_errors': 'lightline#ale#errors',
-    \  'linter_ok': 'lightline#ale#ok',
-    \ }
 let g:lightline.component_type = {
     \  'linter_checking': 'left',
     \  'linter_warnings': 'warning',
@@ -103,22 +95,6 @@ let g:lightline.active = {
         \ [ 'percent' ],
     \ ]
 \ }
-let g:ale_lint_on_text_changed = 'never' "do not lint on text changes
-let g:ale_lint_on_enter = 0 "do not lint on text change
-"let g:ale_completion_enabled = 1
-let g:ale_auto_complete_delay = 200
-
-" Language server
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rust-analyzer'],
-    \ }
-
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-" Or map each action separately
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-
 
 
 set autoindent
@@ -126,7 +102,7 @@ set autoindent
 set wildmenu
 set hlsearch
 
-:syntax enable
+syntax on
 set tabstop=4  " tab is 4 spaces wide
 set shiftwidth=4 " indent with 4 spaces
 set softtabstop=4
