@@ -1,6 +1,9 @@
 set nocompatible
 filetype on
 
+" Set the <leader>
+let mapleader = " "
+
 "Plug commands like :PlugInstall, ...
 
 if has('nvim')
@@ -34,6 +37,9 @@ if has('nvim')
 
     Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
     " ==== END: LSP Support w/ lsp-zero ====
+
+    Plug 'nvim-lua/plenary.nvim' " needed by telescope
+    Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 else
     " Vim
     " Install vim-plug with:
@@ -51,9 +57,6 @@ Plug 'rust-lang/rust.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'editorconfig/editorconfig-vim'
 
-
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
 call plug#end()
 
 if !has('gui_running')
@@ -174,9 +177,6 @@ set listchars+=tab:^-
 set listchars+=trail:`
 
 
-"FZF
-nnoremap <silent> <C-p> :Files<CR>
-
 " ====== nvim plugin config =======
 if has('nvim')
 lua << EOF
@@ -263,5 +263,15 @@ vim.diagnostic.config({
   severity_sort = false,
   float = true,
 })
+
+-- telescope
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+vim.keymap.set('n', '<C-p>', builtin.find_files, {})
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+vim.keymap.set('n', '<leader>vh', builtin.help_tags, {})
+
 EOF
 endif "nvim
