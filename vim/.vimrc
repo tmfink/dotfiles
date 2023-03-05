@@ -221,20 +221,8 @@ lua << EOF
   },
 }
 
-local lsp = require('lsp-zero').preset({
-  name = 'minimal',
-  set_lsp_keymaps = true,
-  manage_nvim_cmp = true,
-  suggest_lsp_servers = false,
-})
-
--- (Optional) Configure lua language server for neovim
-lsp.nvim_workspace()
-
-lsp.setup()
 --[[
-Keybindings:
-
+lsp-zero keybindings:
 https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md
 
 K: Displays hover information about the symbol under the cursor window.
@@ -254,6 +242,29 @@ gl: Show diagnostics in a floating window.
 ]d: Move to the next diagnostic.
 
 --]]
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.ensure_installed({
+  'rust_analyzer',
+})
+
+lsp.on_attach(function(client, bufnr)
+  local opts = {buffer = bufnr}
+  local bind = vim.keymap.set
+
+  -- https://github.com/neovim/nvim-lspconfig
+  bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+end)
+
+-- (Optional) Configure lua language server for neovim
+lsp.nvim_workspace()
+
+lsp.setup()
 
 vim.diagnostic.config({
   virtual_text = true,
@@ -272,6 +283,8 @@ vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 vim.keymap.set('n', '<leader>vh', builtin.help_tags, {})
+vim.keymap.set('n', '<leader>oo', builtin.lsp_document_symbols, {})
+vim.keymap.set('n', '<leader>OO', builtin.lsp_workspace_symbols, {})
 
 EOF
 endif "nvim
