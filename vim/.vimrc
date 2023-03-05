@@ -204,45 +204,45 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 -- make current file executable
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
-    require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all"
-  ensure_installed = {
-      "bash",
-      "c",
-      "cpp",
-      "diff",
-      "dockerfile",
-      "help",
-      "html",
-      "javascript",
-      "latex",
-      "lua",
-      "make",
-      "python",
-      "rust",
-      "rst",
-      "toml",
-      "typescript",
-      "vim",
-  },
+require'nvim-treesitter.configs'.setup {
+    -- A list of parser names, or "all"
+    ensure_installed = {
+        "bash",
+        "c",
+        "cpp",
+        "diff",
+        "dockerfile",
+        "help",
+        "html",
+        "javascript",
+        "latex",
+        "lua",
+        "make",
+        "python",
+        "rust",
+        "rst",
+        "toml",
+        "typescript",
+        "vim",
+    },
 
-  -- Install parsers synchronously (only applied to `ensure_installed`)
-  sync_install = false,
+    -- Install parsers synchronously (only applied to `ensure_installed`)
+    sync_install = false,
 
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = false,
+    -- Automatically install missing parsers when entering buffer
+    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+    auto_install = false,
 
-  highlight = {
-    -- `false` will disable the whole extension
-    enable = true,
+    highlight = {
+        -- `false` will disable the whole extension
+        enable = true,
 
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
+        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+        -- Using this option may slow down your editor, and you may see some duplicate highlights.
+        -- Instead of true it can also be a list of languages
+        additional_vim_regex_highlighting = false,
+    },
 }
 
 --[[
@@ -267,22 +267,22 @@ gl: Show diagnostics in a floating window.
 
 --]]
 local lsp = require('lsp-zero').preset({
-  name = 'minimal',
-  set_lsp_keymaps = true,
-  manage_nvim_cmp = true,
-  suggest_lsp_servers = false,
+    name = 'minimal',
+    set_lsp_keymaps = true,
+    manage_nvim_cmp = true,
+    suggest_lsp_servers = false,
 })
 
 lsp.ensure_installed({
-  'rust_analyzer',
+    'rust_analyzer',
 })
 
 lsp.on_attach(function(client, bufnr)
-  local opts = {buffer = bufnr}
-  local bind = vim.keymap.set
+    local opts = {buffer = bufnr}
+    local bind = vim.keymap.set
 
-  -- https://github.com/neovim/nvim-lspconfig
-  bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+    -- https://github.com/neovim/nvim-lspconfig
+    bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
 end)
 
 -- (Optional) Configure lua language server for neovim
@@ -291,12 +291,12 @@ lsp.nvim_workspace()
 lsp.setup()
 
 vim.diagnostic.config({
-  virtual_text = true,
-  signs = true,
-  update_in_insert = false,
-  underline = true,
-  severity_sort = false,
-  float = true,
+    virtual_text = true,
+    signs = true,
+    update_in_insert = false,
+    underline = true,
+    severity_sort = false,
+    float = true,
 })
 
 -- telescope
