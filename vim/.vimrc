@@ -93,6 +93,7 @@ if $TERMINAL_EMULATOR == "JetBrains-JediTerm"
 else
     colorscheme torte
 endif
+set termguicolors
 
 let g:lightline = {
     \ 'component': {
@@ -131,6 +132,10 @@ set backspace=2 " make backspace work like most other apps
 set number " turn line numbers on
 set nocompatible " turn off emulation of vi bugs
 set nowrap
+set colorcolumn=80
+
+"min number of lines to show before/after cursor
+set scrolloff=4
 
 set ruler "show col/row
 
@@ -180,6 +185,25 @@ set listchars+=trail:`
 " ====== nvim plugin config =======
 if has('nvim')
 lua << EOF
+-- remaps
+
+-- drag visual selected text up/down
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+-- up/down jumps keep centered
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+
+-- paste over selection without touching registers
+vim.keymap.set("x", "<leader>p", [["_dP]])
+
+-- replace current selection
+vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+
+-- make current file executable
+vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+
     require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
   ensure_installed = {
