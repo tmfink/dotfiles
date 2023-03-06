@@ -40,6 +40,7 @@ if has('nvim')
 
     Plug 'nvim-lua/plenary.nvim' " needed by telescope
     Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
+    Plug 'simrat39/symbols-outline.nvim'
 else
     " Vim
     " Install vim-plug with:
@@ -323,6 +324,8 @@ vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 vim.keymap.set('n', '<leader>vh', builtin.help_tags, {})
 vim.keymap.set('n', '<leader>oo', builtin.lsp_document_symbols, {})
 vim.keymap.set('n', '<leader>OO', builtin.lsp_workspace_symbols, {})
+
+require("symbols-outline").setup()
 
 EOF
 endif "nvim
