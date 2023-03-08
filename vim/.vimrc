@@ -206,6 +206,9 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 -- make current file executable
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
+-- toggle symbol outline
+vim.keymap.set("n", "<leader>so", ":SymbolsOutline<CR>")
+
 require'nvim-treesitter.configs'.setup {
     -- A list of parser names, or "all"
     ensure_installed = {
