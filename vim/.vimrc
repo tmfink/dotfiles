@@ -13,7 +13,10 @@ if has('nvim')
     "     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     "
     " debug with :checkhealth
-    call plug#begin('~/.local/share/nvim/plugged')
+    lua vim.g["platform_name"] =
+        \ vim.loop.os_uname().machine .. "-" .. vim.loop.os_uname().sysname
+
+    call plug#begin('~/.local/share/nvim/plugged/' . platform_name)
 
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
