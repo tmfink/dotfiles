@@ -95,7 +95,9 @@ if $TERMINAL_EMULATOR == "JetBrains-JediTerm"
 else
     colorscheme torte
 endif
-set termguicolors
+if has("termguicolors")
+    set termguicolors
+endif
 
 let g:lightline = {
     \ 'component': {
@@ -172,9 +174,8 @@ function! FindNonAscii()
 endfunction
 
 for shell_cand in ["bash", "zsh", "sh"]
-    let output=trim(system("which " . shell_cand))
-    if len(output) > 0 && filereadable(output)
-        let &shell=output
+    if executable(shell_cand)
+        let &shell=shell_cand
         break
     endif
 endfor
