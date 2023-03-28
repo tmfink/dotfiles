@@ -137,6 +137,7 @@ autocmd BufNewFile,BufRead *.mir set syntax=rust
 
 set backspace=2 " make backspace work like most other apps
 set number " turn line numbers on
+set relativenumber
 set nocompatible " turn off emulation of vi bugs
 set nowrap
 set colorcolumn=80
