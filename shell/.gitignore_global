@@ -12,3 +12,9 @@ peda-session-*.txt
 .idea
 .gdb_history
 .vscode
+__pycache__
+
+.pnp.*
+.yarn/build-state.yml
+.yarn/install-state.gz
+.yarn/unplugged
