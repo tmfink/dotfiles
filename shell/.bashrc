@@ -174,6 +174,8 @@ eval $(gpg-agent --daemon >& /dev/null)
 # added by travis gem
 [ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
 
+alias n='nvim'
+
 # Git aliases
 alias g='git'
 alias ga='git add'
