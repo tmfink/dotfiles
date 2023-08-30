@@ -18,10 +18,14 @@ function _bash_escape() {
 function git_prompt_disable() {
   export DISABLE_GIT_PROMPT=1
 }
+alias gpd=git_prompt_disable
+alias disable_git_prompt=git_prompt_disable
 
 function git_prompt_enable() {
   export DISABLE_GIT_PROMPT=
 }
+alias gpe=git_prompt_enable
+alias enable_git_prompt=git_prompt_enable
 
 # Outputs current branch info in prompt format
 function git_prompt_info() {
