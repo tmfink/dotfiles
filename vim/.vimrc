@@ -226,7 +226,6 @@ require'nvim-treesitter.configs'.setup {
         "cpp",
         "diff",
         "dockerfile",
-        "help",
         "html",
         "javascript",
         "latex",
