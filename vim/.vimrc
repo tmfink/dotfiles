@@ -38,7 +38,7 @@ if has('nvim')
     Plug 'L3MON4D3/LuaSnip'             " Required
     Plug 'rafamadriz/friendly-snippets' " Optional
 
-    Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
+    Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}
     " ==== END: LSP Support w/ lsp-zero ====
 
     Plug 'nvim-lua/plenary.nvim' " needed by telescope
@@ -273,7 +273,7 @@ require'nvim-treesitter.configs'.setup {
 
 --[[
 lsp-zero keybindings:
-https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md
+https://github.com/VonHeikemen/lsp-zero.nvim/tree/v3.x#keybindings
 
 K: Displays hover information about the symbol under the cursor window.
 gd: Jumps to the definition of the symbol under the cursor.
@@ -292,29 +292,39 @@ gl: Show diagnostics in a floating window.
 ]d: Move to the next diagnostic.
 
 --]]
-local lsp = require('lsp-zero').preset({
-    name = 'minimal',
-    set_lsp_keymaps = true,
-    manage_nvim_cmp = true,
-    suggest_lsp_servers = false,
-})
-
-lsp.ensure_installed({
-    'rust_analyzer',
-})
-
-lsp.on_attach(function(client, bufnr)
+local lsp_zero = require('lsp-zero')
+lsp_zero.on_attach(function(client, bufnr)
+    -- see :help lsp-zero-keybindings
+    -- to learn the available actions
     local opts = {buffer = bufnr}
     local bind = vim.keymap.set
 
     -- https://github.com/neovim/nvim-lspconfig
     bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+
+    lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
--- (Optional) Configure lua language server for neovim
-lsp.nvim_workspace()
+local lspconfig = require('lspconfig')
 
-lsp.setup()
+-- (Optional) Configure lua language server for neovim
+local lua_opts = lsp_zero.nvim_lua_ls()
+lspconfig.lua_ls.setup(lua_opts)
+
+-- use zls from path
+if vim.fn.executable('zls') == 1 then
+    lspconfig.zls.setup{}
+end
+
+lsp_zero.setup()
+
+require('mason').setup({})
+require('mason-lspconfig').setup({
+    ensure_installed = {'rust_analyzer'},
+    handlers = {
+        lsp_zero.default_setup,
+    },
+})
 
 vim.diagnostic.config({
     virtual_text = true,
