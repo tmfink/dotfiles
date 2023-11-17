@@ -64,6 +64,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'dhruvasagar/vim-table-mode'
+Plug 'ziglang/zig.vim'
 
 call plug#end()
 
