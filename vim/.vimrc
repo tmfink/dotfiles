@@ -54,6 +54,11 @@ else
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
+if !has('nvim-0.9.0')
+    "nvim 0.9.0 has editorconfig built-in
+    Plug 'editorconfig/editorconfig-vim'
+endif
+
 "Common Vim/Neovim installs
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
@@ -62,7 +67,6 @@ Plug 'itchyny/lightline.vim'
 Plug 'juneedahamed/vc.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
-Plug 'editorconfig/editorconfig-vim'
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'ziglang/zig.vim'
 
