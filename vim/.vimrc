@@ -402,6 +402,9 @@ vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 vim.keymap.set('n', '<leader>vh', builtin.help_tags, {})
 vim.keymap.set('n', '<leader>oo', builtin.lsp_document_symbols, {})
 vim.keymap.set('n', '<leader>OO', builtin.lsp_workspace_symbols, {})
+vim.keymap.set('n', '<leader>tb', builtin.buffers, {})
+--vim.keymap.set('n', '<C-x>', builtin.lsp_references, {})
+vim.keymap.set('n', '<leader>fx', builtin.lsp_references, {})
 
 require("symbols-outline").setup()
 
