@@ -57,6 +57,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 . ~/bin/bashrc_lib.rc >& /dev/null
+. ~/bin/_zig.bash >& /dev/null
 
 if [ "$SSH_CLIENT" ]; then
     PS1_REMOTE='[R]'
@@ -149,6 +150,13 @@ export PATH="$HOME/apps/android-platform-tools:$PATH"
 export PATH="$HOME/bin:$PATH"
 
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+
+# ZVM (zig version manager)
+# https://www.zvm.app/guide/install.html
+# zvm i -D=zls master
+export ZVM_INSTALL="$HOME/.zvm/self"
+export PATH="$PATH:$HOME/.zvm/bin"
+export PATH="$PATH:$ZVM_INSTALL"
 
 # ls time style
 export TIME_STYLE=long-iso
