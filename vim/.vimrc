@@ -164,7 +164,7 @@ autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
 autocmd BufRead,BufNewFile *.ts,*.js,*.css set expandtab ts=2 sw=2 softtabstop=2
-"autocmd BufRead,BufNewFile *.rs set colorcolumn= colorcolumn=100
+autocmd BufRead,BufNewFile *.rs set colorcolumn= colorcolumn=100
 
 "function ShowSpaces(...)
 "  let @/='\v(\s+$)|( +\ze\t)'
