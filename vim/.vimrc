@@ -9,7 +9,7 @@ let mapleader = " "
 if has('nvim')
     " NeoVim
     " Install vim-plug with:
-    " curl -fLo ~/.local/share"/nvim/site/autoload/plug.vim --create-dirs \
+    " curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     "     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     "
     " debug with :checkhealth
