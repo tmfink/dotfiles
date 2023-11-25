@@ -176,10 +176,14 @@ fi
 
 
 # Use openssh ssh agent instead of gnome
-eval $(ssh-agent.sh)
+if type -P ssh-agent.sh >& /dev/null ; then
+    eval $(ssh-agent.sh)
+fi
 
 # Start GPG agent
-eval $(gpg-agent --daemon >& /dev/null)
+if type -P gpg-agent >& /dev/null ; then
+    eval $(gpg-agent --daemon >& /dev/null)
+fi
 
 # added by travis gem
 [ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
