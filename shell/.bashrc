@@ -149,7 +149,9 @@ export PATH="/usr/local/go/bin:$PATH"
 export PATH="$HOME/apps/android-platform-tools:$PATH"
 export PATH="$HOME/bin:$PATH"
 
-export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+if type -P rustc >& /dev/null ; then
+    export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+fi
 
 # ZVM (zig version manager)
 # https://www.zvm.app/guide/install.html
