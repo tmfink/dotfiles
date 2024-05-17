@@ -30,14 +30,14 @@ print(os.path.relpath(sys.argv[1], sys.argv[2]))
 }
 
 link_vimrc() {
-    local src="$(abs_path "$1")"; shift
-    local dst="$(abs_path "$1")"; shift
+    src="$(abs_path "$1")"; shift
+    dst="$(abs_path "$1")"; shift
 
-    local dst_dir="$(dirname -- "${dst}")"
-    local dst_base="$(basename -- "${dst}")"
+    dst_dir="$(dirname -- "${dst}")"
+    dst_base="$(basename -- "${dst}")"
 
-    local rel_dst="$(rel_path "${src}" "${dst_dir}")"
-    [ $? -eq 0 ] || Error "Failed to compute relative path"
+    rel_dst="$(rel_path "${src}" "${dst_dir}" ; false)" \
+        || Error "Failed to compute relative path"
 
     if [ -L "${dst}" ]; then
         echo "Symlink ${dst} already exists, nothing to do"
