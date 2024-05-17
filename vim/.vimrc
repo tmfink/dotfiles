@@ -205,6 +205,11 @@ set listchars+=trail:`
 " ====== nvim plugin config =======
 if has('nvim')
 lua << EOF
+
+function I(arg)
+    print(vim.inspect(arg))
+end
+
 -- remaps
 
 -- drag visual selected text up/down
@@ -246,6 +251,7 @@ require'nvim-treesitter.configs'.setup {
         "toml",
         "typescript",
         "vim",
+        "vimdoc",
     },
 
     -- Install parsers synchronously (only applied to `ensure_installed`)
