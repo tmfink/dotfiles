@@ -5,6 +5,7 @@ set -eu
 
 Error() {
     echo "ERROR" "$@" 1>&2
+    echo "exiting..." 1>&2
     exit 1
 }
 
@@ -57,10 +58,20 @@ link_vimrc "${DOTFILES_VIMRC}" "${HOME_VIMRC}"
 
 # Install Neovim config
 echo "Symlinking neovim config"
-HOME_NVIMRC="${HOME}/.config/nvim/init.vim"
-NVIM_HOME="$(dirname -- ${HOME_NVIMRC})"
+DOTFILES_INIT_LUA="${Mydir}/init.lua"
+HOME_NVIMRC_OLD="${HOME}/.config/nvim/init.vim"
+HOME_NVIMRC="${HOME}/.config/nvim/init.lua"
+NVIM_HOME="$(dirname -- "${HOME_NVIMRC}")"
 mkdir -p "${NVIM_HOME}"
-link_vimrc "${HOME_VIMRC}" "${HOME_NVIMRC}"
+if [ -e "${HOME_NVIMRC_OLD}" ] ; then
+    if [ -s "${HOME_NVIMRC_OLD}" ]; then
+        echo "delete old init.vim symlink: ${HOME_NVIMRC_OLD}"
+        rm "${HOME_NVIMRC_OLD}"
+    else
+        Error "Old init.vim file exists; handle manually: ${HOME_NVIMRC_OLD}"
+    fi
+fi
+link_vimrc "${DOTFILES_INIT_LUA}" "${HOME_NVIMRC}"
 
 # Install Plug for vim and neovim
 echo "Installing Plug"
