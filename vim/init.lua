@@ -2,9 +2,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-local vim = vim
-local Plug = vim.fn['plug#']
-
 --Plug commands like :PlugInstall, ...
 --
 -- NeoVim
@@ -13,8 +10,44 @@ local Plug = vim.fn['plug#']
 --     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 --
 -- debug with :checkhealth
-local platform_name = vim.loop.os_uname().machine .. "-" .. vim.loop.os_uname().sysname
-vim.call('plug#begin', '~/.local/share/nvim/plugged/' .. platform_name)
+
+-- bootstrap plug
+local bootstrap_plug = true
+local plug_install_path = vim.fn.stdpath("data") .. "/site/autoload/plug.vim"
+local plug_installed = false
+if (vim.uv or vim.loop).fs_stat(plug_install_path) then
+    plug_installed = true
+else
+    if bootstrap_plug then
+        local install_cmd = {
+            "curl",
+            "-fLo",
+            plug_install_path,
+            "--create-dirs",
+            "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim",
+        }
+        print("installing plug package manager...")
+        print("Install cmd: " .. table.concat(install_cmd, " "))
+        local ok, err_msg = pcall(vim.fn.system, install_cmd)
+        if not ok then
+            print('Failed to install plug!')
+            print(err_msg)
+        else
+            plug_installed = true
+        end
+    end
+end
+
+if plug_installed then
+vim.opt.rtp:prepend(plug_install_path)
+local vim = vim
+local Plug = vim.fn['plug#']
+local platform_name =
+    vim.loop.os_uname().machine
+    .. "-"
+    .. vim.loop.os_uname().sysname
+local plug_path = vim.env.HOME .. '/.local/share/nvim/plugged/' .. platform_name
+vim.call('plug#begin', plug_path)
 
 Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
 
@@ -58,6 +91,7 @@ Plug('dhruvasagar/vim-table-mode')
 Plug('ziglang/zig.vim')
 
 vim.call('plug#end')
+end -- plug_installed
 
 -- alacritty can't handle cursor reshaping?
 vim.opt.guicursor = ""
@@ -182,6 +216,12 @@ end
 vim.opt.listchars:append('tab:^-')
 vim.opt.listchars:append('trail:`')
 
+if not plug_installed then
+    -- print('plug not installed, skipping plugin config since bootstrap_plug is false')
+    return
+end
+
+--------- Plugin config ---------
 
 -- remaps
 
