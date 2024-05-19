@@ -118,13 +118,6 @@ vim.opt.wildignore:append("*/.git/*,*/.hg/*,*/.svn/*")
 
 vim.opt.hidden = true
 
-
---[[
-"lightline: fix display
-set laststatus=2
-set noshowmode "do not need Vim's default bar
---]]
-
 if vim.env['TERMINAL_EMULATOR'] == 'JetBrains-JediTerm' then
     vim.cmd('colorscheme default')
 else
