@@ -111,7 +111,7 @@ function I(arg)
 end
 
 -- convert backslashes on windows to forward slashes
-vim.opt.shellslash = true
+--vim.opt.shellslash = true -- breaks on nvim 0.10.0
 
 -- Excluding version control directories
 vim.opt.wildignore:append("*/.git/*,*/.hg/*,*/.svn/*")
