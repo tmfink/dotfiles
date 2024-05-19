@@ -1,6 +1,6 @@
 [core]
 	excludesfile = ~/.gitignore_global
-	editor = vim
+	editor = vim.sh
 [user]
 	name = Travis Finkenauer
 	email = tmfinken@gmail.com
