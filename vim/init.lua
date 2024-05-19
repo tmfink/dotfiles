@@ -15,6 +15,7 @@ vim.g.maplocalleader = " "
 local bootstrap_plug = true
 local plug_install_path = vim.fn.stdpath("data") .. "/site/autoload/plug.vim"
 local plug_installed = false
+local plug_just_installed = false
 if (vim.uv or vim.loop).fs_stat(plug_install_path) then
     plug_installed = true
 else
@@ -34,6 +35,7 @@ else
             print(err_msg)
         else
             plug_installed = true
+            plug_just_installed = true
         end
     end
 end
@@ -92,6 +94,11 @@ Plug('ziglang/zig.vim')
 
 vim.call('plug#end')
 end -- plug_installed
+
+-- Try to install plugins if this is the first time
+if plug_just_installed then
+    vim.cmd('PlugInstall')
+end
 
 -- alacritty can't handle cursor reshaping?
 vim.opt.guicursor = ""
@@ -248,7 +255,7 @@ require'nvim-treesitter.configs'.setup {
         "dockerfile",
         "html",
         "javascript",
-        "latex",
+        --"latex", --gives warning about treesitter CLI
         "lua",
         "make",
         "python",
