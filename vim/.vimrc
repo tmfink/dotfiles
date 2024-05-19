@@ -1,3 +1,5 @@
+" For neovim config, see: ~/.config/nvim/init.lua
+
 set nocompatible
 filetype on
 
