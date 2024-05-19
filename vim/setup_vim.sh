@@ -36,7 +36,7 @@ link_vimrc() {
     dst_dir="$(dirname -- "${dst}")"
     dst_base="$(basename -- "${dst}")"
 
-    rel_dst="$(rel_path "${src}" "${dst_dir}" ; false)" \
+    rel_dst="$(rel_path "${src}" "${dst_dir}")" \
         || Error "Failed to compute relative path"
 
     if [ -L "${dst}" ]; then
