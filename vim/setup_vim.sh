@@ -73,16 +73,12 @@ if [ -e "${HOME_NVIMRC_OLD}" ] ; then
 fi
 link_vimrc "${DOTFILES_INIT_LUA}" "${HOME_NVIMRC}"
 
-# Install Plug for vim and neovim
+# Install Plug for vim (neovim "init.lua" automatically installs plug)
 echo "Installing Plug"
 PLUG_URL="https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 VIM_PLUG_PATH="${HOME}/.vim/autoload/plug.vim"
-NVIM_PLUG_PATH="${HOME}/.local/share/nvim/site/autoload/plug.vim"
 mkdir -p "$(dirname -- "${VIM_PLUG_PATH}")"
-mkdir -p "$(dirname -- "${NVIM_PLUG_PATH}")"
 [ -e "${VIM_PLUG_PATH}" ] \
     || curl -fLo "${VIM_PLUG_PATH}" "${PLUG_URL}"
-[ -e "${NVIM_PLUG_PATH}" ] \
-    || cp "${VIM_PLUG_PATH}" "${NVIM_PLUG_PATH}"
 
 echo "Done!"
