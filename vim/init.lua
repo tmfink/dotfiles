@@ -158,6 +158,11 @@ let g:lightline.active = {
 
 vim.cmd('autocmd BufNewFile,BufRead *.mir set syntax=rust')
 
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 4
+vim.opt.expandtab = true
+
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.wrap = false
