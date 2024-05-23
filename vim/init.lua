@@ -93,6 +93,7 @@ Plug('tpope/vim-fugitive')
 Plug('tpope/vim-obsession')
 Plug('dhruvasagar/vim-table-mode')
 Plug('ziglang/zig.vim')
+Plug('lewis6991/gitsigns.nvim')
 
 vim.call('plug#end')
 end -- plug_installed
@@ -435,3 +436,5 @@ vim.keymap.set('n', '<leader>tb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fx', builtin.lsp_references, {})
 
 require("symbols-outline").setup()
+
+require('gitsigns').setup()
