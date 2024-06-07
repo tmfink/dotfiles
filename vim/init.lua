@@ -388,9 +388,15 @@ lsp_zero.on_attach(function(client, bufnr)
     local bind = vim.keymap.set
 
     -- https://github.com/neovim/nvim-lspconfig
-    bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+    bind('n', '<leader>r', function() vim.lsp.buf.rename() end, opts)
+    bind('n', '<leader>h', function()
+        -- toggle inlay hints
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+    end, opts)
 
     lsp_zero.default_keymaps({buffer = bufnr})
+
+    vim.lsp.inlay_hint.enable() --enable inlay hints by default
 end)
 
 local lspconfig = require('lspconfig')
