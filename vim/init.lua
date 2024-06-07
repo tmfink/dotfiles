@@ -53,6 +53,10 @@ local platform_name =
 local plug_path = vim.env.HOME .. '/.local/share/nvim/plugged/' .. platform_name
 vim.call('plug#begin', plug_path)
 
+-- Indirect dependencies
+Plug('nvim-lua/plenary.nvim') -- needed by telescope, hardtime
+Plug('MunifTanjim/nui.nvim') -- needed by hardtime
+
 Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
 
 -- ==== BEGIN: LSP Support w/ lsp-zero ====
@@ -75,8 +79,6 @@ Plug('rafamadriz/friendly-snippets') -- Optional
 
 Plug('VonHeikemen/lsp-zero.nvim', { ['branch'] = 'v3.x'})
 -- ==== END: LSP Support w/ lsp-zero ====
-
-Plug('nvim-lua/plenary.nvim') -- needed by telescope
 Plug('nvim-telescope/telescope.nvim', { ['branch'] = '0.1.x' })
 Plug('simrat39/symbols-outline.nvim')
 
@@ -94,6 +96,10 @@ Plug('tpope/vim-obsession')
 Plug('dhruvasagar/vim-table-mode')
 Plug('ziglang/zig.vim')
 Plug('lewis6991/gitsigns.nvim')
+
+-- Make nvim picky
+Plug('tris203/precognition.nvim')
+Plug('m4xshen/hardtime.nvim')
 
 vim.call('plug#end')
 end -- plug_installed
@@ -438,3 +444,7 @@ vim.keymap.set('n', '<leader>fx', builtin.lsp_references, {})
 require("symbols-outline").setup()
 
 require('gitsigns').setup()
+
+--enable to make nvim picky
+--require('precognition').setup()
+--require('hardtime').setup()
