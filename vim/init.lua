@@ -389,10 +389,11 @@ lsp_zero.on_attach(function(client, bufnr)
 
     -- https://github.com/neovim/nvim-lspconfig
     bind('n', '<leader>r', function() vim.lsp.buf.rename() end, opts)
-    bind('n', '<leader>h', function()
-        -- toggle inlay hints
+    local toggle_inlay_hint = function()
         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-    end, opts)
+    end
+    bind('n', '<leader>h', toggle_inlay_hint, opts)
+    bind('n', '<leader>i', toggle_inlay_hint, opts)
 
     lsp_zero.default_keymaps({buffer = bufnr})
 
@@ -446,6 +447,7 @@ vim.keymap.set('n', '<leader>OO', builtin.lsp_workspace_symbols, {})
 vim.keymap.set('n', '<leader>tb', builtin.buffers, {})
 --vim.keymap.set('n', '<C-x>', builtin.lsp_references, {})
 vim.keymap.set('n', '<leader>fx', builtin.lsp_references, {})
+vim.keymap.set('n', '<leader>gx', builtin.lsp_references, {})
 
 require("symbols-outline").setup()
 
