@@ -414,11 +414,32 @@ end
 lsp_zero.setup()
 
 require('mason').setup({})
-require('mason-lspconfig').setup({
+
+local table_contains = function(tbl, item)
+    for _, value in pairs(tbl) do
+        if value == item then
+            return true
+        end
+    end
+    return false
+end
+
+-- Mason fails to install binaries on less common platforms, so only
+-- auto-install binaries when it will likely work
+local is_bin_install_ok = false
+if table_contains({'Linux', 'Darwin'}, vim.loop.os_uname().sysname) then
+    is_bin_install_ok = true
+end
+
+local ensure_installed = {}
+if is_bin_install_ok then
     ensure_installed = {
         'lua_ls',
         'rust_analyzer',
-    },
+    }
+end
+require('mason-lspconfig').setup({
+    ensure_installed = ensure_installed,
     handlers = {
         lsp_zero.default_setup,
     },
