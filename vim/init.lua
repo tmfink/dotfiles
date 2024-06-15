@@ -454,5 +454,5 @@ require("symbols-outline").setup()
 require('gitsigns').setup()
 
 --enable to make nvim picky
---require('precognition').setup()
+--require('precognition').setup({})
 --require('hardtime').setup()
