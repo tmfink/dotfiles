@@ -96,6 +96,7 @@ Plug('tpope/vim-obsession')
 Plug('dhruvasagar/vim-table-mode')
 Plug('ziglang/zig.vim')
 Plug('lewis6991/gitsigns.nvim')
+Plug('mg979/vim-visual-multi')
 
 -- Make nvim picky
 Plug('tris203/precognition.nvim')
