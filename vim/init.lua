@@ -97,6 +97,7 @@ Plug('dhruvasagar/vim-table-mode')
 Plug('ziglang/zig.vim')
 Plug('lewis6991/gitsigns.nvim')
 Plug('mg979/vim-visual-multi')
+Plug('smoka7/hop.nvim')
 
 -- Make nvim picky
 Plug('tris203/precognition.nvim')
@@ -478,3 +479,17 @@ require('gitsigns').setup()
 --enable to make nvim picky
 --require('precognition').setup({})
 --require('hardtime').setup()
+
+local hop = require('hop')
+hop.setup({
+    multi_windows = true,
+})
+vim.keymap.set('', '<leader>1', function ()
+    hop.hint_char1()
+end)
+vim.keymap.set('', '<leader>2', function ()
+    hop.hint_char2()
+end)
+vim.keymap.set('', 's', function ()
+    hop.hint_words()
+end)
