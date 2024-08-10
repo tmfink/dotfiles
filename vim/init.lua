@@ -322,6 +322,7 @@ cmp.setup({
   },
   sources = {
     {name = 'nvim_lsp'},
+    {name = 'buffer'},
   },
   mapping = {
     ['<C-y>'] = cmp.mapping.confirm({select = false}),
