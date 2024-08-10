@@ -286,3 +286,12 @@ alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 alias gup='git pull --rebase'
 alias gupv='git pull --rebase -v'
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
+
+# Nixpkgs
+if [ -d "${HOME}/.nix-profile/etc/profile.d" ]; then
+    for i in "${HOME}/.nix-profile/etc/profile.d/"*.sh; do
+        if [ -r "$i" ]; then
+            . "$i"
+        fi
+    done
+fi
