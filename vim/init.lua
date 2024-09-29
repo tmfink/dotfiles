@@ -384,6 +384,7 @@ gl: Show diagnostics in a floating window.
 
 --]]
 local lsp_zero = require('lsp-zero')
+local supports_inlay_hints = vim.fn.has('nvim-0.10') == 1
 lsp_zero.on_attach(function(client, bufnr)
     -- see :help lsp-zero-keybindings
     -- to learn the available actions
@@ -392,15 +393,19 @@ lsp_zero.on_attach(function(client, bufnr)
 
     -- https://github.com/neovim/nvim-lspconfig
     bind('n', '<leader>r', function() vim.lsp.buf.rename() end, opts)
-    local toggle_inlay_hint = function()
-        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+    if supports_inlay_hints then
+        local toggle_inlay_hint = function()
+            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+        end
+        bind('n', '<leader>h', toggle_inlay_hint, opts)
+        bind('n', '<leader>i', toggle_inlay_hint, opts)
     end
-    bind('n', '<leader>h', toggle_inlay_hint, opts)
-    bind('n', '<leader>i', toggle_inlay_hint, opts)
 
     lsp_zero.default_keymaps({buffer = bufnr})
 
-    vim.lsp.inlay_hint.enable() --enable inlay hints by default
+    if supports_inlay_hints then
+        vim.lsp.inlay_hint.enable() --enable inlay hints by default
+    end
 end)
 
 local lspconfig = require('lspconfig')
