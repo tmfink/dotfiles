@@ -4,6 +4,12 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- disable netrw to let nvim-tree take over
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+local enable_ai = false
+
 --Plug commands like :PlugInstall, ...
 --
 -- NeoVim
@@ -42,6 +48,7 @@ else
     end
 end
 
+local has_conform = false
 if plug_installed then
 vim.opt.rtp:prepend(plug_install_path)
 local vim = vim
@@ -53,8 +60,16 @@ local platform_name =
 local plug_path = vim.env.HOME .. '/.local/share/nvim/plugged/' .. platform_name
 vim.call('plug#begin', plug_path)
 
+if vim.fn.has('nvim-0.10') == 1 then
+    Plug('stevearc/conform.nvim')
+    has_conform = true
+elseif vim.fn.has('nvim-0.9') == 1 then
+    Plug('stevearc/conform.nvim', { ['branch'] = 'nvim-0.9' })
+    has_conform = true
+end
+
 -- Indirect dependencies
-Plug('nvim-lua/plenary.nvim') -- needed by telescope, hardtime
+Plug('nvim-lua/plenary.nvim') -- needed by telescope, hardtime, CopilotChat
 Plug('MunifTanjim/nui.nvim') -- needed by hardtime
 
 Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
@@ -81,6 +96,10 @@ Plug('VonHeikemen/lsp-zero.nvim', { ['branch'] = 'v3.x'})
 -- ==== END: LSP Support w/ lsp-zero ====
 Plug('nvim-telescope/telescope.nvim', { ['branch'] = '0.1.x' })
 Plug('simrat39/symbols-outline.nvim')
+Plug('nvim-tree/nvim-tree.lua')
+
+
+Plug('renerocksai/telekasten.nvim')
 
 --Plug 'vim-pandoc/vim-pandoc'
 --Plug 'vim-pandoc/vim-pandoc-syntax'
@@ -102,6 +121,13 @@ Plug('smoka7/hop.nvim')
 -- Make nvim picky
 Plug('tris203/precognition.nvim')
 Plug('m4xshen/hardtime.nvim')
+
+-- AI!
+if enable_ai then
+    Plug('zbirenbaum/copilot.lua')
+    Plug('CopilotC-Nvim/CopilotChat.nvim', { ['branch'] = 'canary' })
+end
+
 
 vim.call('plug#end')
 end -- plug_installed
@@ -499,3 +525,82 @@ end)
 vim.keymap.set('', '<leader>l', function ()
     hop.hint_words()
 end)
+
+-- empty setup using defaults
+require("nvim-tree").setup()
+
+require('telekasten').setup({
+    -- debug = true,
+    -- Put the name of your notes directory here
+    home = vim.fn.expand("~/zettelkasten"),
+    take_over_my_home = false,
+    auto_set_filetype = false,
+})
+
+-- AI!
+if enable_ai then
+    -- https://github.com/zbirenbaum/copilot.lua
+    require('copilot').setup({
+        panel = {
+            enabled = true,
+            auto_refresh = false,
+            keymap = {
+                jump_prev = "[[",
+                jump_next = "]]",
+                accept = "<CR>",
+                refresh = "gr",
+                open = "<M-CR>"
+            },
+            layout = {
+                position = "bottom", -- | top | left | right
+                ratio = 0.4
+            },
+        },
+        suggestion = {
+            enabled = true,
+            auto_trigger = true,
+            hide_during_completion = true,
+            debounce = 75,
+            keymap = {
+                --accept = "<M-l>", -- conflicts with tmux
+                accept = "<C-Space>",
+                accept_word = false,
+                accept_line = false,
+                next = "<M-]>",
+                prev = "<M-[>",
+                dismiss = "<C-]>",
+            },
+        },
+    })
+    -- https://github.com/CopilotC-Nvim/CopilotChat.nvim
+    require("CopilotChat").setup {
+      debug = true, -- Enable debugging
+      -- See Configuration section for rest
+    }
+end
+
+if has_conform then
+    require("conform").setup({
+        formatters_by_ft = {
+            lua = { "stylua" },
+            -- Conform will run multiple formatters sequentially
+            python = { "isort", "black" },
+            -- You can customize some of the format options for the filetype (:help conform.format)
+            rust = { "rustfmt", lsp_format = "fallback" },
+            -- Conform will run the first available formatter
+            javascript = { "prettierd", "prettier", stop_after_first = true },
+        },
+    })
+    local format_buffer = function(args)
+        local range = nil
+        if args.count ~= -1 then
+            local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
+            range = {
+                start = { args.line1, 0 },
+                ["end"] = { args.line2, end_line:len() },
+            }
+        end
+        require("conform").format({ async = true, lsp_format = "fallback", range = range })
+    end
+    vim.api.nvim_create_user_command("Format", format_buffer, { range = true })
+end
