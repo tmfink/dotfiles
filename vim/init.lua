@@ -117,6 +117,7 @@ Plug('ziglang/zig.vim')
 Plug('lewis6991/gitsigns.nvim')
 Plug('mg979/vim-visual-multi')
 Plug('smoka7/hop.nvim')
+Plug('rebelot/kanagawa.nvim')
 
 -- Make nvim picky
 Plug('tris203/precognition.nvim')
@@ -165,7 +166,21 @@ vim.opt.hidden = true
 if vim.env['TERMINAL_EMULATOR'] == 'JetBrains-JediTerm' then
     vim.cmd('colorscheme default')
 else
-    vim.cmd('colorscheme torte')
+    if pcall(function() vim.cmd('colorscheme kanagawa') end) then
+        --vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "#4b4b61", bg = "#4b4b61" })
+    else
+        -- fall back to built-in colorscheme
+        vim.cmd('colorscheme torte')
+
+        -- minor improvements
+        local gutterfg = "#625e5a"
+        local gutterbg = "#282727"
+        local gutter_hl = { fg = gutterfg, bg = gutterbg}
+
+        vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "#f1f797", bg = "#404040" })
+        vim.api.nvim_set_hl(0, "LineNr", gutter_hl)
+        vim.api.nvim_set_hl(0, "SignColumn", gutter_hl)
+    end
 end
 
 vim.opt.termguicolors = true
