@@ -425,7 +425,7 @@ gl: Show diagnostics in a floating window.
 
 --]]
 local lsp_zero = require('lsp-zero')
-local supports_inlay_hints = vim.fn.has('nvim-0.10') == 1
+local supports_inlay_hints = vim.lsp.inlay_hint
 lsp_zero.on_attach(function(client, bufnr)
     -- see :help lsp-zero-keybindings
     -- to learn the available actions
@@ -434,9 +434,11 @@ lsp_zero.on_attach(function(client, bufnr)
 
     -- https://github.com/neovim/nvim-lspconfig
     bind('n', '<leader>r', function() vim.lsp.buf.rename() end, opts)
-    if supports_inlay_hints then
+    if supports_inlay_hints and client and client.server_capabilities.inlayHintProvider then
         local toggle_inlay_hint = function()
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+            local new_state = not vim.lsp.inlay_hint.is_enabled()
+            print("inlay hint: " .. tostring(new_state))
+            vim.lsp.inlay_hint.enable(new_state)
         end
         bind('n', '<leader>h', toggle_inlay_hint, opts)
         bind('n', '<leader>i', toggle_inlay_hint, opts)
@@ -448,6 +450,25 @@ lsp_zero.on_attach(function(client, bufnr)
         vim.lsp.inlay_hint.enable() --enable inlay hints by default
     end
 end)
+
+-- Workaround for slow LSP (such as rust-analyzer) that does not provide inlay
+-- hints by the time `on_attach` is called.
+-- Based on:
+-- https://github.com/mrcjkb/rustaceanvim/blob/a73e8618d8518b2a7434e1c21e4da4e66f21f738/lua/rustaceanvim/server_status.lua#L14
+if supports_inlay_hints then
+    local M = {}
+    vim.lsp.handlers['experimental/serverStatus'] = function(_, result, ctx, _)
+        --print('Received serverStatus notification:', vim.inspect(result))
+        if result.quiescent and not M.ran_once then
+            for _, bufnr in ipairs(vim.lsp.get_buffers_by_client_id(ctx.client_id)) do
+                --print('serverStatus: flushing inlay')
+                vim.lsp.inlay_hint.enable(false, { bufnr = bufnr });
+                vim.lsp.inlay_hint.enable(true, { bufnr = bufnr });
+            end
+            M.ran_once = true
+        end
+    end
+end
 
 local lspconfig = require('lspconfig')
 
