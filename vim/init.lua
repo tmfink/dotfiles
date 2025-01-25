@@ -542,7 +542,12 @@ vim.keymap.set('n', '<leader>gx', builtin.lsp_references, {})
 
 require("symbols-outline").setup()
 
-require('gitsigns').setup()
+-- gitsigns
+local gitsigns = require('gitsigns')
+gitsigns.setup()
+vim.keymap.set('n', '[h', function() gitsigns.nav_hunk('prev') end)
+vim.keymap.set('n', ']h', function() gitsigns.nav_hunk('next') end)
+
 
 --enable to make nvim picky
 --require('precognition').setup({})
