@@ -143,6 +143,13 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# list all completions: complete -p
+if [ -d "${HOME}/.bash_completions" ]; then
+    for X in "${HOME}/.bash_completions"/* ; do
+        . "$X"
+    done
+fi
+
 export PATH="$HOME/osxcross-prefix/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
@@ -218,6 +225,7 @@ alias gdcw='git diff --cached --word-diff'
 alias gdct='git describe --tags `git rev-list --tags --max-count=1`'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 alias gdw='git diff --word-diff'
+alias gds='git diff --staged'
 alias gf='git fetch'
 alias gfa='git fetch --all --prune'
 alias gg='git gui citool'
