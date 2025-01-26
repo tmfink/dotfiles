@@ -46,7 +46,7 @@ esac
 force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    if which tput >& /dev/null && tput setaf 1 >&/dev/null; then
 	# We have color support; assume it's compliant with Ecma-48
 	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
 	# a case would tend to support setf rather than setaf.)
@@ -90,15 +90,15 @@ export PATH="$HOME/apps/android-platform-tools:$PATH"
 export PATH="$HOME/apps/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 
-EXA="$(which exa 2>/dev/null)"
-if [ -f "$EXA" ]; then
-    LS="$EXA"
+EZA="$(which eza 2>/dev/null)"
+if [ -f "$EZA" ]; then
+    LS="$EZA"
 else
     LS=ls
 fi
 
 # enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
+if which dircolors >& /dev/null ; then
     # Use --color=... to enable color
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls="$LS -F --color=auto"
@@ -295,3 +295,5 @@ if [ -d "${HOME}/.nix-profile/etc/profile.d" ]; then
         fi
     done
 fi
+
+export NIXPKGS_ALLOW_UNFREE=1
