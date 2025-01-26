@@ -118,6 +118,7 @@ Plug('lewis6991/gitsigns.nvim')
 Plug('mg979/vim-visual-multi')
 Plug('smoka7/hop.nvim')
 Plug('rebelot/kanagawa.nvim')
+Plug('kaarmu/typst.vim')
 
 -- Make nvim picky
 Plug('tris203/precognition.nvim')
