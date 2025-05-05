@@ -95,7 +95,7 @@ Plug('rafamadriz/friendly-snippets') -- Optional
 Plug('VonHeikemen/lsp-zero.nvim', { ['branch'] = 'v3.x'})
 -- ==== END: LSP Support w/ lsp-zero ====
 Plug('nvim-telescope/telescope.nvim', { ['branch'] = '0.1.x' })
-Plug('simrat39/symbols-outline.nvim')
+Plug('hedyhli/outline.nvim')
 Plug('nvim-tree/nvim-tree.lua')
 
 
@@ -301,7 +301,7 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 -- toggle symbol outline
-vim.keymap.set("n", "<leader>so", ":SymbolsOutline<CR>")
+vim.keymap.set("n", "<leader>so", ":Outline<CR>", { desc = "Toggle Outline" })
 
 require'nvim-treesitter.configs'.setup {
     -- A list of parser names, or "all"
@@ -541,7 +541,7 @@ vim.keymap.set('n', '<leader>tb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fx', builtin.lsp_references, {})
 vim.keymap.set('n', '<leader>gx', builtin.lsp_references, {})
 
-require("symbols-outline").setup()
+require("outline").setup()
 
 -- gitsigns
 local gitsigns = require('gitsigns')
