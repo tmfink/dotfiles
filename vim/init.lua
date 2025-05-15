@@ -479,7 +479,16 @@ lspconfig.lua_ls.setup(lua_opts)
 
 -- use zls from path
 if vim.fn.executable('zls') == 1 then
-    lspconfig.zls.setup{}
+    lspconfig.zls.setup({})
+end
+
+if vim.fn.executable('nu') == 1 then
+    lspconfig.nushell.setup({
+        cmd = { "nu", "--lsp" },
+        filetypes = { "nu" },
+        root_dir = require("lspconfig.util").find_git_ancestor,
+        single_file_support = true,
+    })
 end
 
 lsp_zero.setup()
