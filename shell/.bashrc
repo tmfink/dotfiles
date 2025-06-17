@@ -190,6 +190,10 @@ if type -P gpg-agent >& /dev/null ; then
     eval $(gpg-agent --daemon >& /dev/null)
 fi
 
+if type starship >& /dev/null ; then
+    eval "$(starship init bash)"
+fi
+
 alias n='nvim'
 
 # Git aliases
