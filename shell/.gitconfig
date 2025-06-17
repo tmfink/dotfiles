@@ -1,3 +1,5 @@
+[include]
+    path = ~/.gitconfig.local
 [core]
 	excludesfile = ~/.gitignore_global
 	editor = vim.sh
@@ -16,3 +18,7 @@
 	rebase = false
 [init]
 	defaultBranch = main
+
+# track github pull requests
+#[remote "origin"]
+#	fetch = +refs/pull/*:refs/remotes/origin/pull/*
