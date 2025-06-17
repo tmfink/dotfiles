@@ -85,9 +85,7 @@ esac
 export TERM="xterm-256color"
 
 export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="/usr/local/go/bin:$PATH"
-export PATH="$HOME/apps/android-platform-tools:$PATH"
-export PATH="$HOME/apps/bin:$PATH"
+#export PATH="$HOME/apps/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 
 EZA="$(which eza 2>/dev/null)"
@@ -128,7 +126,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f ~/.bash_aliases ]; then
+if [ -e ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
@@ -191,9 +189,6 @@ fi
 if type -P gpg-agent >& /dev/null ; then
     eval $(gpg-agent --daemon >& /dev/null)
 fi
-
-# added by travis gem
-[ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
 
 alias n='nvim'
 
@@ -305,3 +300,7 @@ if [ -d "${HOME}/.nix-profile/etc/profile.d" ]; then
 fi
 
 export NIXPKGS_ALLOW_UNFREE=1
+
+if [ -e ~/.bashrc.local ]; then
+    . ~/.bashrc.local
+fi
