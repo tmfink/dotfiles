@@ -137,6 +137,7 @@ if enable_ai then
     Plug('CopilotC-Nvim/CopilotChat.nvim', { ['branch'] = 'main' })
 end
 
+Plug("folke/which-key.nvim")
 
 vim.call('plug#end')
 end -- plug_installed
@@ -323,10 +324,6 @@ end
 
 -- remaps
 
--- drag visual selected text up/down
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
-
 -- up/down jumps keep centered
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
@@ -470,17 +467,17 @@ local supports_inlay_hints = vim.lsp.inlay_hint
 lsp_zero.on_attach(function(client, bufnr)
     -- see :help lsp-zero-keybindings
     -- to learn the available actions
-    local opts = {buffer = bufnr}
     local bind = vim.keymap.set
 
     -- https://github.com/neovim/nvim-lspconfig
-    bind('n', '<leader>r', function() vim.lsp.buf.rename() end, opts)
+    bind('n', '<leader>r', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Rename symbol' })
     if supports_inlay_hints and client and client.server_capabilities.inlayHintProvider then
         local toggle_inlay_hint = function()
             local new_state = not vim.lsp.inlay_hint.is_enabled()
             print("inlay hint: " .. tostring(new_state))
             vim.lsp.inlay_hint.enable(new_state)
         end
+        local opts = { buffer = bufnr, desc = 'Toggle inlay hints' }
         bind('n', '<leader>h', toggle_inlay_hint, opts)
         bind('n', '<leader>i', toggle_inlay_hint, opts)
     end
@@ -575,26 +572,26 @@ vim.diagnostic.config({
 -- telescope
 -- https://github.com/nvim-telescope/telescope.nvim/tree/master#default-mappings
 local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-vim.keymap.set('n', '<C-p>', builtin.find_files, {})
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
-vim.keymap.set('n', '<leader>vh', builtin.help_tags, {})
-vim.keymap.set('n', '<leader>oo', builtin.lsp_document_symbols, {})
-vim.keymap.set('n', '<leader>OO', builtin.lsp_workspace_symbols, {})
-vim.keymap.set('n', '<leader>tb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find files' })
+vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = 'Find files' })
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Live grep' })
+vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Find buffers' })
+vim.keymap.set('n', '<leader>tb', builtin.buffers, { desc = 'Find buffers' })
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Find help' })
+vim.keymap.set('n', '<leader>vh', builtin.help_tags, { desc = 'Find help' })
+vim.keymap.set('n', '<leader>oo', builtin.lsp_document_symbols, { desc = 'Find document symbols' })
+vim.keymap.set('n', '<leader>OO', builtin.lsp_workspace_symbols, { desc = 'Find workspace symbols' })
 --vim.keymap.set('n', '<C-x>', builtin.lsp_references, {})
-vim.keymap.set('n', '<leader>fx', builtin.lsp_references, {})
-vim.keymap.set('n', '<leader>gx', builtin.lsp_references, {})
+vim.keymap.set('n', '<leader>fx', builtin.lsp_references, { desc = 'Find references' })
+vim.keymap.set('n', '<leader>gx', builtin.lsp_references, { desc = 'Find references' })
 
 require("outline").setup()
 
 -- gitsigns
 local gitsigns = require('gitsigns')
 gitsigns.setup()
-vim.keymap.set('n', '[h', function() gitsigns.nav_hunk('prev') end)
-vim.keymap.set('n', ']h', function() gitsigns.nav_hunk('next') end)
+vim.keymap.set('n', '[h', function() gitsigns.nav_hunk('prev') end, { desc = 'prev git hunk' })
+vim.keymap.set('n', ']h', function() gitsigns.nav_hunk('next') end, { desc = 'next git hunk' })
 
 
 --enable to make nvim picky
@@ -605,15 +602,9 @@ local hop = require('hop')
 hop.setup({
     multi_windows = true,
 })
-vim.keymap.set('', '<leader>1', function ()
-    hop.hint_char1()
-end)
-vim.keymap.set('', '<leader>2', function ()
-    hop.hint_char2()
-end)
-vim.keymap.set('', '<leader>l', function ()
-    hop.hint_words()
-end)
+vim.keymap.set('', '<leader>1', hop.hint_char1, {desc = 'hop: hint 1 char'})
+vim.keymap.set('', '<leader>2', hop.hint_char2, {desc = 'hop: hint 2 char'})
+vim.keymap.set('', '<leader>l', hop.hint_words, {desc = 'hop: hint words'})
 
 -- empty setup using defaults
 require("nvim-tree").setup()
