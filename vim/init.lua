@@ -78,7 +78,7 @@ Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
 -- LSP Support
 Plug('neovim/nvim-lspconfig')             -- Required
 Plug('williamboman/mason.nvim')           -- Optional
-Plug('williamboman/mason-lspconfig.nvim') -- Optional
+Plug('williamboman/mason-lspconfig.nvim', {['branch'] = 'v1.x'}) -- Optional
 
 -- Autocompletion Engine
 Plug('hrsh7th/nvim-cmp')         -- Required
@@ -97,6 +97,7 @@ Plug('VonHeikemen/lsp-zero.nvim', { ['branch'] = 'v3.x'})
 Plug('nvim-telescope/telescope.nvim', { ['branch'] = '0.1.x' })
 Plug('hedyhli/outline.nvim')
 Plug('nvim-tree/nvim-tree.lua')
+Plug('stevearc/oil.nvim')
 
 
 Plug('renerocksai/telekasten.nvim')
@@ -119,6 +120,12 @@ Plug('mg979/vim-visual-multi')
 Plug('smoka7/hop.nvim')
 Plug('rebelot/kanagawa.nvim')
 Plug('kaarmu/typst.vim')
+Plug('iamcco/markdown-preview.nvim', {
+    ['do'] = function() vim.fn["mkdp#util#install"]() end,
+    ['for'] = {'markdown', 'vim-plug'},
+})
+Plug('pest-parser/pest.vim')
+Plug('mechatroner/rainbow_csv')
 
 -- Make nvim picky
 Plug('tris203/precognition.nvim')
@@ -127,7 +134,7 @@ Plug('m4xshen/hardtime.nvim')
 -- AI!
 if enable_ai then
     Plug('zbirenbaum/copilot.lua')
-    Plug('CopilotC-Nvim/CopilotChat.nvim', { ['branch'] = 'canary' })
+    Plug('CopilotC-Nvim/CopilotChat.nvim', { ['branch'] = 'main' })
 end
 
 
@@ -148,8 +155,14 @@ filetype plugin indent on    " required
 "filetype plugin on
 --]]
 
--- Disable mouse support
-vim.opt.mouse = ""
+-- mouse support
+if vim.g.neovide then
+    -- enable mouse support
+    vim.opt.mouse = "nvi"
+else
+    -- disable mouse support
+    vim.opt.mouse = ""
+end
 
 -- useful debug
 function I(arg)
@@ -164,6 +177,19 @@ vim.opt.wildignore:append("*/.git/*,*/.hg/*,*/.svn/*")
 
 vim.opt.hidden = true
 
+function torte_tmfink()
+    vim.cmd('colorscheme torte')
+
+    -- minor improvements
+    local gutterfg = "#625e5a"
+    local gutterbg = "#282727"
+    local gutter_hl = { fg = gutterfg, bg = gutterbg}
+
+    vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "#f1f797", bg = "#404040" })
+    vim.api.nvim_set_hl(0, "LineNr", gutter_hl)
+    vim.api.nvim_set_hl(0, "SignColumn", gutter_hl)
+end
+
 if vim.env['TERMINAL_EMULATOR'] == 'JetBrains-JediTerm' then
     vim.cmd('colorscheme default')
 else
@@ -171,16 +197,7 @@ else
         --vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "#4b4b61", bg = "#4b4b61" })
     else
         -- fall back to built-in colorscheme
-        vim.cmd('colorscheme torte')
-
-        -- minor improvements
-        local gutterfg = "#625e5a"
-        local gutterbg = "#282727"
-        local gutter_hl = { fg = gutterfg, bg = gutterbg}
-
-        vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "#f1f797", bg = "#404040" })
-        vim.api.nvim_set_hl(0, "LineNr", gutter_hl)
-        vim.api.nvim_set_hl(0, "SignColumn", gutter_hl)
+        torte_tmfink()
     end
 end
 
@@ -268,6 +285,29 @@ for _, shell_cand in ipairs({ 'bash', 'zsh', 'sh' }) do
         vim.opt.shell = shell_cand
         break
     end
+end
+
+-- Workaround to fix PATH for neovide
+if vim.g.neovide and vim.opt.shell:get() == "bash" then
+    local handle = io.popen("bash -c 'if source ~/.bashrc >/dev/null 2>&1; then echo -n $PATH ; else exit 1 ; fi'")
+    if handle then
+        local result = handle:read("*a")
+        handle:close()
+        if result and #result > 0 then
+            vim.env.PATH = result
+        end
+    end
+
+    vim.keymap.set({ "n", "x" }, "<C-S-C>", '"+y', { desc = "Copy system clipboard" })
+    vim.keymap.set({ "n", "x" }, "<C-S-V>", ':set paste<CR>"+p:set nopaste<CR>', { desc = "Paste system clipboard (paste mode)" })
+
+    vim.cmd([[
+        let g:neovide_input_use_logo = 1
+        map <D-v> "+p<CR>
+        map! <D-v> <C-R>+
+        tmap <D-v> <C-R>+
+        vmap <D-c> "+y<CR>
+    ]])
 end
 
 -- Make "set list" more useful.
@@ -655,3 +695,7 @@ if has_conform then
     end
     vim.api.nvim_create_user_command("Format", format_buffer, { range = true })
 end
+
+require("oil").setup({
+    default_file_explorer = false,
+})
