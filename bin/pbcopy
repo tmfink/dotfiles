@@ -9,7 +9,7 @@ Linux)
     exec xclip -selection clipboard -i "$@"
     ;;
 Darwin)
-    exec pbcopy "$@"
+    exec /usr/bin/pbcopy "$@"
     ;;
 *)
     echo "pbcopy not implemented for $UNAME"

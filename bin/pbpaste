@@ -12,7 +12,7 @@ Linux)
     exit 0
     ;;
 Darwin)
-    exec pbpaste "$@"
+    exec /usr/bin/pbpaste "$@"
     ;;
 *)
     echo "pbcopy not implemented for $UNAME"
