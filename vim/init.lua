@@ -78,7 +78,7 @@ Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
 -- LSP Support
 Plug('neovim/nvim-lspconfig')             -- Required
 Plug('williamboman/mason.nvim')           -- Optional
-Plug('williamboman/mason-lspconfig.nvim', {['branch'] = 'v1.x'}) -- Optional
+Plug('williamboman/mason-lspconfig.nvim', {['branch'] = 'main'}) -- Optional
 
 -- Autocompletion Engine
 Plug('hrsh7th/nvim-cmp')         -- Required
@@ -511,19 +511,17 @@ if supports_inlay_hints then
     end
 end
 
-local lspconfig = require('lspconfig')
-
 -- (Optional) Configure lua language server for neovim
 local lua_opts = lsp_zero.nvim_lua_ls()
-lspconfig.lua_ls.setup(lua_opts)
+vim.lsp.config('lua_ls', lua_opts)
 
 -- use zls from path
 if vim.fn.executable('zls') == 1 then
-    lspconfig.zls.setup({})
+    vim.lsp.config('zls', {})
 end
 
 if vim.fn.executable('nu') == 1 then
-    lspconfig.nushell.setup({
+    vim.lsp.config('nushell', {
         cmd = { "nu", "--lsp" },
         filetypes = { "nu" },
         root_dir = require("lspconfig.util").find_git_ancestor,
