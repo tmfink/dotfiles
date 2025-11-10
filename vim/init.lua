@@ -147,7 +147,7 @@ if plug_just_installed then
 end
 
 -- alacritty can't handle cursor reshaping?
-vim.opt.guicursor = ""
+--vim.opt.guicursor = ""
 
 --[[ not needed for nvim?
 filetype plugin indent on    " required
@@ -699,3 +699,10 @@ end
 require("oil").setup({
     default_file_explorer = false,
 })
+
+vim.cmd([[
+augroup vimrc_help
+  autocmd!
+  autocmd BufEnter *.txt if &buftype == 'help' | wincmd L | endif
+augroup END
+]])
