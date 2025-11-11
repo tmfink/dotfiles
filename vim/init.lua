@@ -137,7 +137,11 @@ if enable_ai then
     Plug('CopilotC-Nvim/CopilotChat.nvim', { ['branch'] = 'main' })
 end
 
-Plug("folke/which-key.nvim")
+Plug('folke/which-key.nvim')
+Plug('nvim-mini/mini.pairs', { ['branch'] = 'stable' })
+if vim.fn.has("nvim-0.10.0") == 1 then
+    Plug('folke/ts-comments.nvim')
+end
 
 vim.call('plug#end')
 end -- plug_installed
@@ -203,27 +207,6 @@ else
 end
 
 vim.opt.termguicolors = true
-
---[[
-let g:lightline = {
-    \ 'component': {
-        \ 'charvaluehex': '0x%B'
-    \ },
-\ }
-let g:lightline.component_type = {
-    \  'linter_checking': 'left',
-    \  'linter_warnings': 'warning',
-    \  'linter_errors': 'error',
-    \  'linter_ok': 'left',
-    \ }
-let g:lightline.active = {
-    \ 'right': [
-        \ [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
-        \ [ 'lineinfo' ],
-        \ [ 'percent' ],
-    \ ]
-\ }
---]]
 
 vim.cmd('autocmd BufNewFile,BufRead *.mir set syntax=rust')
 
@@ -695,3 +678,6 @@ augroup vimrc_help
   autocmd BufEnter *.txt if &buftype == 'help' | wincmd L | endif
 augroup END
 ]])
+
+require('mini.pairs').setup()
+require('ts-comments').setup()
