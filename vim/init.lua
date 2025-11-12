@@ -700,7 +700,7 @@ require('lualine').setup({
         lualine_c = {
             {
                 'filename',
-                path = 3,
+                path = 1, -- show the relative path and shorten $HOME to ~
             },
         },
         lualine_x = {'lsp_status', 'encoding', 'fileformat', 'filetype'},
