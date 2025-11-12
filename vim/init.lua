@@ -99,7 +99,6 @@ Plug('hedyhli/outline.nvim')
 Plug('nvim-tree/nvim-tree.lua')
 Plug('stevearc/oil.nvim')
 
-
 Plug('renerocksai/telekasten.nvim')
 
 --Plug 'vim-pandoc/vim-pandoc'
@@ -109,7 +108,7 @@ Plug('renerocksai/telekasten.nvim')
 Plug('editorconfig/editorconfig-vim')
 
 Plug('rust-lang/rust.vim')
-Plug('itchyny/lightline.vim')
+Plug('nvim-lualine/lualine.nvim')
 Plug('juneedahamed/vc.vim')
 Plug('tpope/vim-fugitive')
 Plug('tpope/vim-obsession')
@@ -683,3 +682,44 @@ augroup END
 require('mini.pairs').setup()
 require('nvim-ts-autotag').setup()
 require('ts-comments').setup()
+
+require('lualine').setup({
+    options = {
+        icons_enabled = false,
+        theme = 'powerline', -- matches lightline default
+        component_separators = { left = '|', right = '|'},
+        section_separators = { left = '', right = ''},
+        always_divide_middle = true,
+        always_show_tabline = true,
+        globalstatus = false,
+    },
+    -- sections for focused buffer
+    sections = {
+        lualine_a = {'mode'},
+        lualine_b = {'branch', 'diff', 'diagnostics'},
+        lualine_c = {
+            {
+                'filename',
+                path = 3,
+            },
+        },
+        lualine_x = {'lsp_status', 'encoding', 'fileformat', 'filetype'},
+        lualine_y = {'progress'},
+        lualine_z = {'location'}
+    },
+    -- sections for inactive buffers
+    inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = {'filename'},
+        lualine_x = {'location'},
+        lualine_y = {},
+        lualine_z = {}
+    },
+    extensions = {
+        'man',
+        'oil',
+        'quickfix',
+        'symbols-outline',
+    }
+})
