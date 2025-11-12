@@ -139,6 +139,7 @@ end
 
 Plug('folke/which-key.nvim')
 Plug('nvim-mini/mini.pairs', { ['branch'] = 'stable' })
+Plug('windwp/nvim-ts-autotag')
 if vim.fn.has("nvim-0.10.0") == 1 then
     Plug('folke/ts-comments.nvim')
 end
@@ -337,11 +338,12 @@ require'nvim-treesitter.configs'.setup {
         "lua",
         "make",
         "python",
-        "rust",
         "rst",
+        "rust",
         "toml",
         "typescript",
         "vim",
+        "xml",
     },
 
     -- Install parsers synchronously (only applied to `ensure_installed`)
@@ -679,4 +681,5 @@ augroup END
 ]])
 
 require('mini.pairs').setup()
+require('nvim-ts-autotag').setup()
 require('ts-comments').setup()
