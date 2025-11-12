@@ -376,7 +376,6 @@ require'nvim-treesitter.configs'.setup {
 }
 
 local cmp = require('cmp')
-
 cmp.setup({
   preselect = 'item',
   completion = {
@@ -388,7 +387,7 @@ cmp.setup({
   },
   mapping = {
     ['<C-y>'] = cmp.mapping.confirm({select = false}),
-    ['<CR>'] = cmp.mapping.confirm({select = false}),
+    -- ['<CR>'] = cmp.mapping.confirm({select = false}), -- interferes w/ inserting newline
     -- toggle completion window
     ['<C-e>'] = cmp.mapping(function()
       if cmp.visible() then
