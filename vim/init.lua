@@ -154,12 +154,6 @@ end
 -- alacritty can't handle cursor reshaping?
 --vim.opt.guicursor = ""
 
---[[ not needed for nvim?
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
---]]
-
 -- mouse support
 if vim.g.neovide then
     -- enable mouse support
@@ -182,7 +176,7 @@ vim.opt.wildignore:append("*/.git/*,*/.hg/*,*/.svn/*")
 
 vim.opt.hidden = true
 
-function torte_tmfink()
+function CustomTorte()
     vim.cmd('colorscheme torte')
 
     -- minor improvements
@@ -194,6 +188,7 @@ function torte_tmfink()
     vim.api.nvim_set_hl(0, "LineNr", gutter_hl)
     vim.api.nvim_set_hl(0, "SignColumn", gutter_hl)
 end
+vim.api.nvim_create_user_command('CustomTorte', CustomTorte, {})
 
 if vim.env['TERMINAL_EMULATOR'] == 'JetBrains-JediTerm' then
     vim.cmd('colorscheme default')
@@ -202,7 +197,7 @@ else
         --vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "#4b4b61", bg = "#4b4b61" })
     else
         -- fall back to built-in colorscheme
-        torte_tmfink()
+        CustomTorte()
     end
 end
 
@@ -336,7 +331,10 @@ require'nvim-treesitter.configs'.setup {
         --"latex", --gives warning about treesitter CLI
         "lua",
         "make",
+        "markdown",
+        "markdown_inline",
         "python",
+        "regex",
         "rst",
         "rust",
         "toml",
