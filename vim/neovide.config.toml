@@ -1,0 +1,6 @@
+# Store in: ~/.config/neovide/config.toml
+
+[font]
+normal = ["FiraMono Nerd Font"]
+size = 12 # default
+#size = 32 # big
