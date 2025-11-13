@@ -266,20 +266,22 @@ for _, shell_cand in ipairs({ 'bash', 'zsh', 'sh' }) do
     end
 end
 
--- Workaround to fix PATH for neovide
-if vim.g.neovide and vim.opt.shell:get() == "bash" then
-    local handle = io.popen("bash -c 'if source ~/.bashrc >/dev/null 2>&1; then echo -n $PATH ; else exit 1 ; fi'")
-    if handle then
-        local result = handle:read("*a")
-        handle:close()
-        if result and #result > 0 then
-            vim.env.PATH = result
+if vim.g.neovide then
+    if vim.opt.shell:get() == "bash" then
+        -- Workaround to fix env vars like PATH
+        local handle = io.popen("bash -c 'if source ~/.bashrc >/dev/null 2>&1; then echo -n $PATH ; else exit 1 ; fi'")
+        if handle then
+            local result = handle:read("*a")
+            handle:close()
+            if result and #result > 0 then
+                vim.env.PATH = result
+            end
         end
     end
 
+    -- clipboard copy/paste
     vim.keymap.set({ "n", "x" }, "<C-S-C>", '"+y', { desc = "Copy system clipboard" })
     vim.keymap.set({ "n", "x" }, "<C-S-V>", ':set paste<CR>"+p:set nopaste<CR>', { desc = "Paste system clipboard (paste mode)" })
-
     vim.cmd([[
         let g:neovide_input_use_logo = 1
         map <D-v> "+p<CR>
@@ -287,6 +289,29 @@ if vim.g.neovide and vim.opt.shell:get() == "bash" then
         tmap <D-v> <C-R>+
         vmap <D-c> "+y<CR>
     ]])
+
+    -- dynamic zoom/scale
+    vim.g.neovide_scale_factor = 1.0
+    local change_scale_factor = function(delta)
+        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
+    end
+    -- Support Ctrl prefix on all systems
+    local prefixes = {"C"}
+    if vim.loop.os_uname().sysname == 'Darwin' then
+        -- only support Command prefix on Mac OS
+        vim.list_extend(prefixes, {"D"})
+    end
+    for _, prefix in ipairs(prefixes) do
+        vim.keymap.set("n", "<" .. prefix .. "-0>", function()
+            vim.g.neovide_scale_factor = 1.0
+        end, { desc = "Neovide: reset zoom" })
+        vim.keymap.set("n", "<" .. prefix .. "-=>", function()
+            change_scale_factor(1.25)
+        end, { desc = "Neovide: zoom in" })
+        vim.keymap.set("n", "<" .. prefix .. "-->", function()
+            change_scale_factor(1/1.25)
+        end, { desc = "Neovide: zoom out" })
+    end
 end
 
 -- Make "set list" more useful.
