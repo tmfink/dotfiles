@@ -221,15 +221,55 @@ vim.cmd('autocmd BufRead,BufNewFile *.rs set colorcolumn= colorcolumn=100')
 -- min number of lines to show before/after cursor
 vim.opt.scrolloff = 4
 
--- show trailing whitespace
-vim.cmd([[
-highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$/
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-autocmd BufWinLeave * call clearmatches()
-]])
+-- show trailing whitespace, ignoring special buffers
+do
+    local hl_group = "ExtraWhitespace"
+    local ignore_fts = { "man", "mason", "help", "NvimTree", "TelescopePrompt" }
+    local ignore_bts = { "nofile", "prompt", "terminal" }
+
+    local function ignore_trailing()
+        if not vim.bo.modifiable then return false end
+        local ft = vim.bo.filetype
+        local bt = vim.bo.buftype
+        for _, v in ipairs(ignore_fts) do
+            if ft == v then return true end
+        end
+        for _, v in ipairs(ignore_bts) do
+            if bt == v then return true end
+        end
+        return false
+    end
+
+    vim.api.nvim_set_hl(0, hl_group, { ctermbg = "red", bg = "red" })
+    vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+        pattern = "*",
+        callback = function()
+            if ignore_trailing() then return end
+            vim.fn.matchadd(hl_group, [[\s\+$]])
+        end,
+    })
+    vim.api.nvim_create_autocmd({ "InsertEnter" }, {
+        pattern = "*",
+        callback = function()
+            if ignore_trailing() then return end
+            vim.fn.matchadd(hl_group, [[\s\+\%#\@<!$]])
+        end,
+    })
+    vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+        pattern = "*",
+        callback = function()
+            if ignore_trailing() then return end
+            vim.fn.matchadd(hl_group, [[\s\+$]])
+        end,
+    })
+    vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
+        pattern = "*",
+        callback = function()
+            if ignore_trailing() then return end
+            vim.fn.clearmatches()
+        end,
+    })
+end
 
 vim.cmd('autocmd BufRead,BufNewFile *.ts,*.js,*.css set expandtab ts=2 sw=2 softtabstop=2')
 
