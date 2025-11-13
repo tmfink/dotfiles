@@ -81,12 +81,7 @@ Plug('williamboman/mason.nvim')           -- Optional
 Plug('williamboman/mason-lspconfig.nvim', {['branch'] = 'main'}) -- Optional
 
 -- Autocompletion Engine
-Plug('hrsh7th/nvim-cmp')         -- Required
-Plug('hrsh7th/cmp-nvim-lsp')     -- Required
-Plug('hrsh7th/cmp-buffer')       -- Optional
-Plug('hrsh7th/cmp-path')         -- Optional
-Plug('saadparwaiz1/cmp_luasnip') -- Optional
-Plug('hrsh7th/cmp-nvim-lua')     -- Optional
+Plug('saghen/blink.cmp', {['tag'] = 'v1.*'})
 
 --  Snippets
 Plug('L3MON4D3/LuaSnip')             -- Required
@@ -432,53 +427,6 @@ require'nvim-treesitter.configs'.setup {
     --]]
 }
 
-local cmp = require('cmp')
-cmp.setup({
-  preselect = 'item',
-  completion = {
-    completeopt = 'menu,menuone,noinsert'
-  },
-  sources = {
-    {name = 'nvim_lsp'},
-    {name = 'buffer'},
-  },
-  mapping = {
-    ['<C-y>'] = cmp.mapping.confirm({select = false}),
-    -- ['<CR>'] = cmp.mapping.confirm({select = false}), -- interferes w/ inserting newline
-    -- toggle completion window
-    ['<C-e>'] = cmp.mapping(function()
-      if cmp.visible() then
-        cmp.abort()
-      else
-        cmp.complete()
-      end
-    end),
-    ['<Up>'] = cmp.mapping.select_prev_item({behavior = 'select'}),
-    ['<Down>'] = cmp.mapping.select_next_item({behavior = 'select'}),
-    ['<C-p>'] = cmp.mapping(function()
-      if cmp.visible() then
-        cmp.select_prev_item({behavior = 'insert'})
-      else
-        cmp.complete()
-      end
-    end),
-    ['<C-n>'] = cmp.mapping(function()
-      if cmp.visible() then
-        cmp.select_next_item({behavior = 'insert'})
-      else
-        cmp.complete()
-      end
-    end),
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
-
-  },
-  snippet = {
-    expand = function(args)
-      require('luasnip').lsp_expand(args.body)
-    end,
-  },
-})
 
 --[[
 lsp-zero keybindings:
@@ -566,6 +514,46 @@ if vim.fn.executable('nu') == 1 then
 end
 
 lsp_zero.setup()
+
+require('blink.cmp').setup({
+    -- See :h blink-cmp-config-keymap for defining your own keymap
+    keymap = {
+        preset = 'none',
+        ['<C-e>'] = { 'show', 'hide', 'fallback' },
+        ['<C-n>'] = { 'select_next', 'fallback_to_mappings' },
+        ['<C-p>'] = { 'select_prev', 'fallback_to_mappings' },
+        ['<C-y>'] = { 'accept', 'fallback' },
+
+        ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
+        ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
+        ['<C-u>'] = { 'scroll_documentation_up', 'fallback' },
+        ['<C-d>'] = { 'scroll_documentation_down', 'fallback' },
+
+        ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
+    },
+    appearance = {
+        -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+        -- Adjusts spacing to ensure icons are aligned
+        nerd_font_variant = 'mono'
+    },
+    completion = {
+        keyword = { range = 'full' },
+        documentation = { auto_show = true },
+        list = {
+            selection = {
+                preselect = true,
+                auto_insert = false,
+            }
+        },
+        ghost_text = { enabled = true },
+        signature = { enabled = true },
+    },
+    snippets = { preset = 'luasnip' },
+    sources = {
+        default = { 'lsp', 'path', 'snippets', 'buffer' },
+    },
+    fuzzy = { implementation = "prefer_rust_with_warning" },
+})
 
 require('mason').setup({})
 
