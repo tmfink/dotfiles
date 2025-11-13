@@ -224,20 +224,13 @@ vim.opt.scrolloff = 4
 -- show trailing whitespace, ignoring special buffers
 do
     local hl_group = "ExtraWhitespace"
-    local ignore_fts = { "man", "mason", "help", "NvimTree", "TelescopePrompt" }
-    local ignore_bts = { "nofile", "prompt", "terminal" }
+    local ignore_filetypes = { "man", "mason", "help", "NvimTree", "TelescopePrompt", "blink-cmp-menu" }
+    local ignore_buftypes = { "nofile", "prompt", "terminal", "popup", "acwrite" }
 
     local function ignore_trailing()
-        if not vim.bo.modifiable then return false end
-        local ft = vim.bo.filetype
-        local bt = vim.bo.buftype
-        for _, v in ipairs(ignore_fts) do
-            if ft == v then return true end
-        end
-        for _, v in ipairs(ignore_bts) do
-            if bt == v then return true end
-        end
-        return false
+        return not vim.bo.modifiable
+            or vim.list_contains(ignore_filetypes, vim.bo.filetype)
+            or vim.list_contains(ignore_buftypes, vim.bo.buftype)
     end
 
     vim.api.nvim_set_hl(0, hl_group, { ctermbg = "red", bg = "red" })
