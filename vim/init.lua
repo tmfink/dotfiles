@@ -734,8 +734,22 @@ require('lualine').setup({
         component_separators = { left = '|', right = '|'},
         section_separators = { left = '', right = ''},
         always_divide_middle = true,
-        always_show_tabline = true,
+        always_show_tabline = false,
         globalstatus = false,
+    },
+    tabline = {
+        lualine_a = {
+            {
+                'tabs',
+                mode = 2,
+                max_length = vim.o.columns,
+            },
+        },
+        lualine_b = {},
+        lualine_c = {},
+        lualine_x = {},
+        lualine_y = {},
+        lualine_z = {}
     },
     -- sections for focused buffer
     sections = {
