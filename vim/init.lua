@@ -74,21 +74,21 @@ Plug('MunifTanjim/nui.nvim') -- needed by hardtime
 
 Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
 
--- ==== BEGIN: LSP Support w/ lsp-zero ====
+-- ==== BEGIN: LSP Support ====
 -- LSP Support
-Plug('neovim/nvim-lspconfig')             -- Required
-Plug('williamboman/mason.nvim')           -- Optional
-Plug('williamboman/mason-lspconfig.nvim', {['branch'] = 'main'}) -- Optional
+Plug('neovim/nvim-lspconfig')
+Plug('williamboman/mason.nvim')
+Plug('williamboman/mason-lspconfig.nvim', {['branch'] = 'main'})
+Plug('folke/lazydev.nvim')
 
 -- Autocompletion Engine
 Plug('saghen/blink.cmp', {['tag'] = 'v1.*'})
 
 --  Snippets
-Plug('L3MON4D3/LuaSnip')             -- Required
-Plug('rafamadriz/friendly-snippets') -- Optional
+Plug('L3MON4D3/LuaSnip')
+Plug('rafamadriz/friendly-snippets')
+-- ==== END: LSP Support ====
 
-Plug('VonHeikemen/lsp-zero.nvim', { ['branch'] = 'v3.x'})
--- ==== END: LSP Support w/ lsp-zero ====
 Plug('nvim-telescope/telescope.nvim', { ['branch'] = '0.1.x' })
 Plug('hedyhli/outline.nvim')
 Plug('nvim-tree/nvim-tree.lua')
@@ -428,53 +428,7 @@ require'nvim-treesitter.configs'.setup {
 }
 
 
---[[
-lsp-zero keybindings:
-https://github.com/VonHeikemen/lsp-zero.nvim/tree/v3.x#keybindings
-
-K: Displays hover information about the symbol under the cursor window.
-gd: Jumps to the definition of the symbol under the cursor.
-gD: Jumps to the declaration of the symbol under the cursor.
-gi: Lists all the implementations for the symbol under the cursor in the
-    quickfix window.
-go: Jumps to the definition of the type of the symbol under the cursor.
-gr: Lists all the references to the symbol under the cursor in the quickfix
-    window.
-<Ctrl-k>: Displays signature information about the symbol under the cursor in
-    a floating window.
-<F2>: Renames all references to the symbol under the cursor.
-<F4>: Selects a code action available at the current cursor position.
-gl: Show diagnostics in a floating window.
-[d: Move to the previous diagnostic in the current buffer.
-]d: Move to the next diagnostic.
-
---]]
-local lsp_zero = require('lsp-zero')
 local supports_inlay_hints = vim.lsp.inlay_hint
-lsp_zero.on_attach(function(client, bufnr)
-    -- see :help lsp-zero-keybindings
-    -- to learn the available actions
-    local bind = vim.keymap.set
-
-    -- https://github.com/neovim/nvim-lspconfig
-    bind('n', '<leader>r', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Rename symbol' })
-    if supports_inlay_hints and client and client.server_capabilities.inlayHintProvider then
-        local toggle_inlay_hint = function()
-            local new_state = not vim.lsp.inlay_hint.is_enabled()
-            print("inlay hint: " .. tostring(new_state))
-            vim.lsp.inlay_hint.enable(new_state)
-        end
-        local opts = { buffer = bufnr, desc = 'Toggle inlay hints' }
-        bind('n', '<leader>h', toggle_inlay_hint, opts)
-        bind('n', '<leader>i', toggle_inlay_hint, opts)
-    end
-
-    lsp_zero.default_keymaps({buffer = bufnr})
-
-    if supports_inlay_hints then
-        vim.lsp.inlay_hint.enable() --enable inlay hints by default
-    end
-end)
 
 -- Workaround for slow LSP (such as rust-analyzer) that does not provide inlay
 -- hints by the time `on_attach` is called.
@@ -495,10 +449,6 @@ if supports_inlay_hints then
     end
 end
 
--- (Optional) Configure lua language server for neovim
-local lua_opts = lsp_zero.nvim_lua_ls()
-vim.lsp.config('lua_ls', lua_opts)
-
 -- use zls from path
 if vim.fn.executable('zls') == 1 then
     vim.lsp.config('zls', {})
@@ -513,7 +463,56 @@ if vim.fn.executable('nu') == 1 then
     })
 end
 
-lsp_zero.setup()
+-- Based on lsp-zero keybindings:
+-- https://github.com/VonHeikemen/lsp-zero.nvim/tree/v3.x#keybindings
+vim.api.nvim_create_autocmd('LspAttach', {
+    desc = 'LSP actions',
+    callback = function(event)
+        local bufnr = event.buf
+        local function map(mode, lhs, rhs, desc)
+            vim.keymap.set(mode, lhs, rhs, {buffer = bufnr, desc = desc})
+        end
+        map('n', 'K', vim.lsp.buf.hover, 'Hover info')
+        map('n', 'gd', vim.lsp.buf.definition, 'Go to definition')
+        map('n', 'gD', vim.lsp.buf.declaration, 'Go to declaration')
+        map('n', 'gi', vim.lsp.buf.implementation, 'Go to implementation')
+        map('n', 'go', vim.lsp.buf.type_definition, 'Go to type definition ')
+        map('n', 'gs', vim.lsp.buf.signature_help, 'Help for signature')
+        map('n', '<C-k>', vim.lsp.buf.signature_help, 'Help for signature')
+        map('n', 'gl', vim.diagnostic.open_float, 'Show diag in float')
+        map('n', '<F2>', vim.lsp.buf.rename, 'Rename symbol')
+        map('n', '<leader>r', vim.lsp.buf.rename, 'Rename symbol')
+        map('n', '<F3>', function() vim.lsp.buf.format({async = true}) end, 'Format file')
+        map('x', '<F3>', function () vim.lsp.buf.format({async = true}) end, 'Format selection')
+        map('n', '<F4>', vim.lsp.buf.code_action, 'Code action')
+        map('n', 'g.', vim.lsp.buf.code_action, 'Code action')
+
+
+        local id = vim.tbl_get(event, 'data', 'client_id')
+        local client = {}
+        if id then
+            client = vim.lsp.get_client_by_id(id)
+        end
+
+        if supports_inlay_hints and client and client.server_capabilities.inlayHintProvider then
+            local toggle_inlay_hint = function()
+                local new_state = not vim.lsp.inlay_hint.is_enabled()
+                print("inlay hint: " .. tostring(new_state))
+                vim.lsp.inlay_hint.enable(new_state)
+            end
+            local opts = { buffer = bufnr, desc = 'Toggle inlay hints' }
+            vim.keymap.set('n', '<leader>h', toggle_inlay_hint, opts)
+            vim.keymap.set('n', '<leader>i', toggle_inlay_hint, opts)
+        end
+
+        --enable inlay hints by default
+        if supports_inlay_hints then
+            vim.lsp.inlay_hint.enable()
+        end
+    end,
+})
+
+require('lazydev').setup()
 
 require('blink.cmp').setup({
     -- See :h blink-cmp-config-keymap for defining your own keymap
@@ -546,12 +545,20 @@ require('blink.cmp').setup({
             }
         },
         ghost_text = { enabled = true },
-        signature = { enabled = true },
     },
     snippets = { preset = 'luasnip' },
     sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer' },
+        default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
+        providers = {
+            lazydev = {
+                name = "LazyDev",
+                module = "lazydev.integrations.blink",
+                -- make lazydev completions top priority (see `:h blink.cmp`)
+                score_offset = 100,
+            },
+        },
     },
+    signature = { enabled = true },
     fuzzy = { implementation = "prefer_rust_with_warning" },
 })
 
@@ -582,9 +589,6 @@ if is_bin_install_ok then
 end
 require('mason-lspconfig').setup({
     ensure_installed = ensure_installed,
-    handlers = {
-        lsp_zero.default_setup,
-    },
 })
 
 vim.diagnostic.config({
@@ -723,7 +727,7 @@ augroup vimrc_help
 augroup END
 ]])
 
-require('mini.pairs').setup()
+-- require('mini.pairs').setup()
 require('nvim-ts-autotag').setup()
 require('ts-comments').setup()
 
