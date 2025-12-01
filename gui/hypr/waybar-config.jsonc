@@ -38,11 +38,19 @@
         ],
         // Modules configuration
         "hyprland/workspaces": {
+            "on-click": "activate",
             "all-outputs": true,
             "disable-scroll": false,
             //"on-scroll-down": "hyprctl dispatch workspace m+1",
             //"on-scroll-up": "hyprctl dispatch workspace m-1",
-            "warp-on-scroll": false
+            "warp-on-scroll": false,
+            "persistent-workspaces": {
+                "1": [],
+                "2": [],
+                "3": [],
+                "4": [],
+                "5": []
+            }
         },
         "keyboard-state": {
             "numlock": true,
