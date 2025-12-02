@@ -21,7 +21,7 @@
             "mpd",
             "idle_inhibitor",
             "pulseaudio",
-            //"network",
+            "network",
             "power-profiles-daemon",
             "cpu",
             //"disk",
@@ -34,6 +34,7 @@
             "battery#bat2",
             "clock",
             "tray",
+            "bluetooth",
             "custom/power"
         ],
         // Modules configuration
@@ -100,8 +101,8 @@
         "idle_inhibitor": {
             "format": "{icon}",
             "format-icons": {
-                "activated": "",
-                "deactivated": ""
+                "activated": "󰅶",
+                "deactivated": "󰾪"
             }
         },
         "tray": {
@@ -187,18 +188,18 @@
           "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
           "tooltip": true,
           "format-icons": {
-            "default": "",
-            "performance": "",
-            "balanced": "",
-            "power-saver": ""
+            "default": " ",
+            "performance": " ",
+            "balanced": " ",
+            "power-saver": " "
           }
         },
         "network": {
             // "interface": "wlp2*", // (Optional) To force the use of this interface
             "format-wifi": "{essid} ({signalStrength}%) ",
-            "format-ethernet": "{ipaddr}/{cidr} ",
-            "tooltip-format": "{ifname} via {gwaddr} ",
-            "format-linked": "{ifname} (No IP) ",
+            "format-ethernet": "{ipaddr}/{cidr} 󰈀",
+            "tooltip-format": "{ifname} via {gwaddr} 󱂇",
+            "format-linked": "{ifname} (No IP) 󰲜",
             "format-disconnected": "Disconnected ⚠",
             "format-alt": "{ifname}: {ipaddr}/{cidr}"
         },
@@ -212,8 +213,8 @@
             "format-source-muted": "",
             "format-icons": {
                 "headphone": "",
-                "hands-free": "",
-                "headset": "",
+                "hands-free": "",
+                "headset": "",
                 "phone": "",
                 "portable": "",
                 "car": "",

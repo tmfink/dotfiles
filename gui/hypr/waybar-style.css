@@ -103,7 +103,7 @@
 @define-color updates-color @orange;
 @define-color quote-color @green;
 @define-color idle-inhibitor-color @foreground;
-@define-color idle-inhibitor-active-color @red;
+@define-color idle-inhibitor-active-color @blue;
 
 * {
     /* Base styling for all modules */
@@ -286,7 +286,7 @@ window#waybar {
 
 #idle_inhibitor {
     color: @idle-inhibitor-color;
-    border-bottom-color: transparent;
+    border-bottom-color: darkgrey;
 }
 
 #idle_inhibitor.activated {
