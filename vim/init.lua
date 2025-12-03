@@ -240,7 +240,7 @@ do
         pattern = "*",
         callback = function()
             if ignore_trailing() then return end
-            vim.fn.matchadd(hl_group, [[\s\+\%#\@<!$]])
+            vim.fn.clearmatches()
         end,
     })
     vim.api.nvim_create_autocmd({ "InsertLeave" }, {
