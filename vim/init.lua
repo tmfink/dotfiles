@@ -72,7 +72,7 @@ end
 Plug('nvim-lua/plenary.nvim') -- needed by telescope, hardtime, CopilotChat
 Plug('MunifTanjim/nui.nvim') -- needed by hardtime
 
-Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
+Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate', ['branch'] = 'master'})
 
 -- ==== BEGIN: LSP Support ====
 -- LSP Support
@@ -132,7 +132,6 @@ if enable_ai then
 end
 
 Plug('folke/which-key.nvim')
-Plug('nvim-mini/mini.pairs', { ['branch'] = 'stable' })
 Plug('windwp/nvim-ts-autotag')
 if vim.fn.has("nvim-0.10.0") == 1 then
     Plug('folke/ts-comments.nvim')
@@ -727,7 +726,6 @@ augroup vimrc_help
 augroup END
 ]])
 
--- require('mini.pairs').setup()
 require('nvim-ts-autotag').setup()
 require('ts-comments').setup()
 
