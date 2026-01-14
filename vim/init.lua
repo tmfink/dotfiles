@@ -132,6 +132,7 @@ if enable_ai then
 end
 
 Plug('folke/which-key.nvim')
+Plug('rachartier/tiny-code-action.nvim')
 Plug('windwp/nvim-ts-autotag')
 if vim.fn.has("nvim-0.10.0") == 1 then
     Plug('folke/ts-comments.nvim')
@@ -483,7 +484,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
         map('n', '<leader>r', vim.lsp.buf.rename, 'Rename symbol')
         map('n', '<F3>', function() vim.lsp.buf.format({async = true}) end, 'Format file')
         map('x', '<F3>', function () vim.lsp.buf.format({async = true}) end, 'Format selection')
-        map('n', '<F4>', vim.lsp.buf.code_action, 'Code action')
+        -- instead of vim.lsp.buf.code_action
+        map('n', '<F4>', require("tiny-code-action").code_action, 'Code action')
         map('n', 'g.', vim.lsp.buf.code_action, 'Code action')
 
 
@@ -783,3 +785,5 @@ require('lualine').setup({
         'symbols-outline',
     }
 })
+
+require("tiny-code-action").setup({})
