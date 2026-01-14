@@ -71,6 +71,7 @@ end
 -- Indirect dependencies
 Plug('nvim-lua/plenary.nvim') -- needed by telescope, hardtime, CopilotChat
 Plug('MunifTanjim/nui.nvim') -- needed by hardtime
+Plug('MeanderingProgrammer/render-markdown.nvim')
 
 Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate', ['branch'] = 'master'})
 
@@ -832,3 +833,14 @@ require('lualine').setup({
 })
 
 require("tiny-code-action").setup({})
+
+require('render-markdown').setup({
+    heading = { enabled = false },
+    paragraph = { enabled = false },
+    code = { enabled = false },
+    bullet = { enabled = false },
+    checkbox = { enabled = false },
+    quote = { enabled = false },
+    link = { enabled = false },
+    sign = { enabled = false },
+})
