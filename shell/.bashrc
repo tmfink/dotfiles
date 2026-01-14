@@ -84,10 +84,6 @@ esac
 
 export TERM="xterm-256color"
 
-export PATH="$HOME/.cargo/bin:$PATH"
-#export PATH="$HOME/apps/bin:$PATH"
-export PATH="$HOME/bin:$PATH"
-
 EZA="$(which eza 2>/dev/null)"
 if [ -f "$EZA" ]; then
     LS="$EZA"
@@ -121,11 +117,7 @@ fi
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
+# Alias definitions
 if [ -e ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
@@ -148,10 +140,7 @@ if [ -d "${HOME}/.bash_completions" ]; then
     done
 fi
 
-export PATH="$HOME/osxcross-prefix/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="/usr/local/go/bin:$PATH"
-export PATH="$HOME/apps/android-platform-tools:$PATH"
 export PATH="$HOME/bin:$PATH"
 
 if type -P rustc >& /dev/null ; then
@@ -167,8 +156,6 @@ export PATH="$PATH:$ZVM_INSTALL"
 
 # ls time style
 export TIME_STYLE=long-iso
-
-#. "$HOME/apps/emsdk/emsdk_env.sh" > /dev/null
 
 # Vi mode
 set -o vi
