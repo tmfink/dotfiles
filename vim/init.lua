@@ -71,7 +71,7 @@ end
 -- Indirect dependencies
 Plug('nvim-lua/plenary.nvim') -- needed by telescope, hardtime, CopilotChat
 Plug('MunifTanjim/nui.nvim') -- needed by hardtime
-Plug('MeanderingProgrammer/render-markdown.nvim')
+Plug('folke/snacks.nvim') -- needed by opencode
 
 Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate', ['branch'] = 'master'})
 
@@ -121,6 +121,7 @@ Plug('iamcco/markdown-preview.nvim', {
 })
 Plug('pest-parser/pest.vim')
 Plug('mechatroner/rainbow_csv')
+Plug('MeanderingProgrammer/render-markdown.nvim')
 
 -- Make nvim picky
 Plug('tris203/precognition.nvim')
@@ -130,6 +131,7 @@ Plug('m4xshen/hardtime.nvim')
 if enable_ai then
     Plug('zbirenbaum/copilot.lua')
     Plug('CopilotC-Nvim/CopilotChat.nvim', { ['branch'] = 'main' })
+    Plug('NickvanDyke/opencode.nvim')
 end
 
 Plug('folke/which-key.nvim')
@@ -735,6 +737,11 @@ if enable_ai then
       debug = true, -- Enable debugging
       -- See Configuration section for rest
     }
+
+    -- opencode keymaps (grouped under <leader>a)
+    vim.keymap.set({ "n", "x" }, "<leader>aa", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "AI: Ask opencode" })
+    vim.keymap.set({ "n", "x" }, "<leader>as", require("opencode").select, { desc = "AI: Select Action" })
+    vim.keymap.set({ "n", "t" }, "<leader>at", require("opencode").toggle, { desc = "AI: Toggle Window" })
 end
 
 if has_conform then
