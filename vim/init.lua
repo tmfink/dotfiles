@@ -646,6 +646,54 @@ require('telekasten').setup({
     auto_set_filetype = false,
 })
 
+-- Custom command to create today's note from the most recent previous note
+vim.api.nvim_create_user_command('TelekastenCreateToday', function()
+    local tk = require('telekasten')
+
+    -- Default configuration values
+    local switch_message = function(msg)
+        vim.defer_fn(function()
+            vim.notify(msg, vim.log.levels.INFO)
+        end, 500)
+        tk.goto_today({ journal_auto_open = true })
+    end
+
+    -- Try to detect configuration from Telekasten
+    local ext = tk.Cfg.extension
+    local dailies_path = tk.Cfg.dailies
+    local today = os.date("%Y-%m-%d")
+    local today_file = dailies_path .. "/" .. today .. ext
+
+    -- If today's note already exists, just go there
+    if vim.fn.filereadable(today_file) == 1 then
+        switch_message("Today's note already exists, switching to it")
+        return
+    end
+
+    -- Find the most recent previous daily note
+    local files = vim.fn.glob(dailies_path .. "/*" .. ext, true, true)
+    table.sort(files)
+
+    local prev_file = nil
+    for i = #files, 1, -1 do
+        local f = files[i]
+        local name = vim.fn.fnamemodify(f, ":t:r") -- filename without extension
+        if name < today then
+            prev_file = f
+            break
+        end
+    end
+
+    -- Copy content if a previous file was found
+    if prev_file then
+        local lines = vim.fn.readfile(prev_file)
+        vim.fn.writefile(lines, today_file)
+        switch_message("Created today's note from " .. vim.fn.fnamemodify(prev_file, ":t:r"))
+    else
+        switch_message("No previous daily note found. Creating fresh note.")
+    end
+end, {})
+
 -- AI!
 if enable_ai then
     -- https://github.com/zbirenbaum/copilot.lua
