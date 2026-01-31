@@ -51,7 +51,6 @@ config.keys = {
     { key = 'RightArrow', mods = 'SUPER',       action = act.ActivateTabRelative(1) },
     { key = 'LeftArrow',  mods = 'SHIFT|SUPER', action = act.MoveTabRelative(-1) },
     { key = 'RightArrow', mods = 'SHIFT|SUPER', action = act.MoveTabRelative(1) },
-
     {
         key = 'I',
         mods = 'SHIFT|SUPER',
@@ -67,7 +66,11 @@ config.keys = {
             end),
         },
     },
-    -- Splits
+
+    -- Window
+    { key = 'F11', action = wezterm.action.ToggleFullScreen },
+
+    -- Splits (tmux-like)
     {
         key = '%',
         mods = 'CTRL|SHIFT',
@@ -78,11 +81,19 @@ config.keys = {
         mods = 'CTRL|SHIFT',
         action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' }
     },
+
+    -- Splits (terminator-like)
     {
-        key = '"',
+        key = 'O',
+        mods = 'CTRL|SHIFT',
+        action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' }
+    },
+    {
+        key = 'E',
         mods = 'CTRL|SHIFT',
         action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' }
     },
+
     -- Pane focus (arrows)
     {
         key = 'LeftArrow',
@@ -104,6 +115,7 @@ config.keys = {
         mods = 'CTRL|SHIFT',
         action = act.ActivatePaneDirection 'Down',
     },
+
     -- Pane focus (vi keys)
     {
         key = 'h',
@@ -125,6 +137,12 @@ config.keys = {
         mods = 'CTRL|SHIFT',
         action = act.ActivatePaneDirection 'Down',
     },
+
+    -- Pane resize
+    { key = 'H', mods = 'SHIFT|ALT|CTRL', action = act.AdjustPaneSize{ 'Left', 1 } },
+    { key = 'L', mods = 'SHIFT|ALT|CTRL', action = act.AdjustPaneSize{ 'Right', 1 } },
+    { key = 'K', mods = 'SHIFT|ALT|CTRL', action = act.AdjustPaneSize{ 'Up', 1 } },
+    { key = 'J', mods = 'SHIFT|ALT|CTRL', action = act.AdjustPaneSize{ 'Down', 1 } },
 }
 
 -- https://www.reddit.com/r/wezterm/comments/10jda7o/is_there_a_way_not_to_open_urls_on_simple_click/
