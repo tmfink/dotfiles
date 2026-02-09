@@ -45,27 +45,27 @@ config.window_padding = {
 
 -- https://wezterm.org/config/keys.html
 -- Show defaults: wezterm show-keys --lua
+
+local rename_pane_action = act.PromptInputLine {
+    description = 'Enter new name for tab',
+    action = wezterm.action_callback(function(window, _pane, line)
+        -- line will be `nil` if they hit escape without entering anything
+        -- An empty string if they just hit enter
+        -- Or the actual line of text they wrote
+        if line then
+            window:active_tab():set_title(line)
+        end
+    end),
+}
+
 config.keys = {
     -- Tabs
     { key = 'LeftArrow',  mods = 'SUPER',       action = act.ActivateTabRelative(-1) },
     { key = 'RightArrow', mods = 'SUPER',       action = act.ActivateTabRelative(1) },
     { key = 'LeftArrow',  mods = 'SHIFT|SUPER', action = act.MoveTabRelative(-1) },
     { key = 'RightArrow', mods = 'SHIFT|SUPER', action = act.MoveTabRelative(1) },
-    {
-        key = 'I',
-        mods = 'SHIFT|SUPER',
-        action = act.PromptInputLine {
-            description = 'Enter new name for tab',
-            action = wezterm.action_callback(function(window, _pane, line)
-                -- line will be `nil` if they hit escape without entering anything
-                -- An empty string if they just hit enter
-                -- Or the actual line of text they wrote
-                if line then
-                    window:active_tab():set_title(line)
-                end
-            end),
-        },
-    },
+    { key = 'I', mods = 'SHIFT|SUPER', action = rename_pane_action },
+    { key = 'I', mods = 'CTRL|SHIFT', action = rename_pane_action },
 
     -- Window
     { key = 'F11', action = wezterm.action.ToggleFullScreen },
