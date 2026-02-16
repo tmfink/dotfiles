@@ -282,6 +282,11 @@ alias gup='git pull --rebase'
 alias gupv='git pull --rebase -v'
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 
+if type -P fdfind >& /dev/null && ! type -P fd; then
+    # Ubuntu repos have fd as fdfind
+    alias fd=fdfind
+fi
+
 # Nixpkgs
 if [ -d "${HOME}/.nix-profile/etc/profile.d" ]; then
     for i in "${HOME}/.nix-profile/etc/profile.d/"*.sh; do
