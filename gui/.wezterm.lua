@@ -43,6 +43,11 @@ config.window_padding = {
     bottom = 0,
 }
 
+config.inactive_pane_hsb = {
+    saturation = 0.9, -- default 0.9
+    brightness = 0.7, -- default 0.8
+}
+
 -- https://wezterm.org/config/keys.html
 -- Show defaults: wezterm show-keys --lua
 
