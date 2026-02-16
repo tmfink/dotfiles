@@ -141,6 +141,7 @@ if [ -d "${HOME}/.bash_completions" ]; then
 fi
 
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 
 if type -P rustc >& /dev/null ; then
