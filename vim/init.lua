@@ -81,6 +81,7 @@ Plug('neovim/nvim-lspconfig')
 Plug('williamboman/mason.nvim')
 Plug('williamboman/mason-lspconfig.nvim', {['branch'] = 'main'})
 Plug('folke/lazydev.nvim')
+Plug('creativenull/efmls-configs-nvim', {['tag'] = 'v1.*' }) -- pre-configured linters and formatters for efm-langserver
 
 -- Autocompletion Engine
 Plug('saghen/blink.cmp', {['tag'] = 'v1.*'})
@@ -513,6 +514,41 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end,
 })
 
+-- efm LSP linters and formatters
+do
+    local languages = require('efmls-configs.defaults').languages() -- start w/ defaults
+
+    local shellcheck = require('efmls-configs.linters.shellcheck')
+    local ruff = require('efmls-configs.linters.ruff')
+    local shfmt = require('efmls-configs.formatters.shfmt')
+
+    local sh_like = { shellcheck, shfmt }
+    languages.sh = sh_like
+    languages.bash = sh_like
+
+    local efmls_config = {
+        filetypes = vim.tbl_keys(languages),
+        settings = {
+            rootMarkers = { '.git/' },
+            languages = languages,
+        },
+        init_options = {
+            documentFormatting = true,
+            documentRangeFormatting = true,
+        },
+    }
+
+    -- If using nvim >= 0.11 then use the following
+    vim.lsp.config('efm', vim.tbl_extend('force', efmls_config, {
+        cmd = { 'efm-langserver' },
+
+        -- Pass your custom lsp config below like on_attach and capabilities
+        --
+        -- on_attach = on_attach,
+        -- capabilities = capabilities,
+    }))
+end
+
 require('lazydev').setup()
 
 require('blink.cmp').setup({
@@ -583,10 +619,17 @@ end
 
 local ensure_installed = {}
 if is_bin_install_ok then
-    ensure_installed = {
+     ensure_installed = {
+        'efm',
         'lua_ls',
+        'ruff',
         'rust_analyzer',
-    }
+
+        -- mason-lspconfig only supports LSPs, but these linters/formatters are useful too
+        -- https://github.com/mason-org/mason.nvim/issues/1713
+        -- 'shellcheck',
+        -- 'shfmt',
+     }
 end
 require('mason-lspconfig').setup({
     ensure_installed = ensure_installed,
