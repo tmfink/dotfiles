@@ -372,6 +372,10 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 -- toggle symbol outline
 vim.keymap.set("n", "<leader>so", ":Outline<CR>", { desc = "Toggle Outline" })
 
+-- retain visual mode selection after changing indent
+vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
+vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
+
 require'nvim-treesitter.configs'.setup {
     -- A list of parser names, or "all"
     ensure_installed = {
