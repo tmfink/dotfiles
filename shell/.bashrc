@@ -67,7 +67,7 @@ fi
 
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]'"$PS1_REMOTE"':\[\033[01;34m\]\w\[\033[00m\]$(git_prompt_info)\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]'"$PS1_REMOTE"':\[\033[01;34m\]\w\[\033[00m\]$(git_prompt_info >& /dev/null)\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h'"$PS1_REMOTE"':\w\$ '
 fi
@@ -285,6 +285,11 @@ alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 if type -P fdfind >& /dev/null && ! type -P fd; then
     # Ubuntu repos have fd as fdfind
     alias fd=fdfind
+fi
+
+if type -P batcat >& /dev/null && ! type -P fd; then
+    # Ubuntu repos have bat as batcat
+    alias bat=batcat
 fi
 
 # Nixpkgs
