@@ -222,6 +222,7 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 // spawn-at-startup "waybar"
+spawn-at-startup "maestral_qt"
 spawn-at-startup "nm-applet"
 spawn-at-startup "noctalia-shell"
 
@@ -324,6 +325,8 @@ binds {
     Mod+E hotkey-overlay-title="Run an Application: thunar" { spawn "thunar"; }
     Ctrl+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Ctrl+Mod+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
+    Mod+M hotkey-overlay-title="Move mouse w/ keyboard" { spawn "wl-kbptr" "-o" "modes=floating,click" "-o" "mode_floating.source=detect"; }
+    Shift+Mod+M hotkey-overlay-title="Move mouse w/ keyboard" { spawn "wl-kbptr" "-o" "modes=tile,bisect,click"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
