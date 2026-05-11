@@ -49,6 +49,7 @@ else
 end
 
 local has_conform = false
+local nvim_treesitter_branch = 'master'
 if plug_installed then
 vim.opt.rtp:prepend(plug_install_path)
 local vim = vim
@@ -73,7 +74,10 @@ Plug('nvim-lua/plenary.nvim') -- needed by telescope, hardtime, CopilotChat
 Plug('MunifTanjim/nui.nvim') -- needed by hardtime
 Plug('folke/snacks.nvim') -- needed by opencode
 
-Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate', ['branch'] = 'master'})
+if vim.fn.has('nvim-0.12') == 1 then
+    nvim_treesitter_branch = 'main'
+end
+Plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate', ['branch'] = nvim_treesitter_branch })
 
 -- ==== BEGIN: LSP Support ====
 -- LSP Support
@@ -91,7 +95,7 @@ Plug('L3MON4D3/LuaSnip')
 Plug('rafamadriz/friendly-snippets')
 -- ==== END: LSP Support ====
 
-Plug('nvim-telescope/telescope.nvim', { ['branch'] = '0.1.x' })
+Plug('nvim-telescope/telescope.nvim')
 Plug('hedyhli/outline.nvim')
 Plug('nvim-tree/nvim-tree.lua')
 Plug('stevearc/oil.nvim')
@@ -376,62 +380,75 @@ vim.keymap.set("n", "<leader>so", ":Outline<CR>", { desc = "Toggle Outline" })
 vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
 
-require'nvim-treesitter.configs'.setup {
-    -- A list of parser names, or "all"
-    ensure_installed = {
-        "bash",
-        "c",
-        "cpp",
-        "diff",
-        "dockerfile",
-        "html",
-        "javascript",
-        --"latex", --gives warning about treesitter CLI
-        "lua",
-        "make",
-        "markdown",
-        "markdown_inline",
-        "python",
-        "regex",
-        "rst",
-        "rust",
-        "toml",
-        "typescript",
-        "vim",
-        "xml",
-    },
-
-    -- Install parsers synchronously (only applied to `ensure_installed`)
-    sync_install = false,
-
-    -- Automatically install missing parsers when entering buffer
-    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-    auto_install = false,
-
-    highlight = {
-        -- `false` will disable the whole extension
-        enable = true,
-
-        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-        -- Using this option may slow down your editor, and you may see some duplicate highlights.
-        -- Instead of true it can also be a list of languages
-        additional_vim_regex_highlighting = false,
-    },
-
-    --[[
-    incremental_selection = {
-        enable = true,
-        keymaps = {
-            init_selection = "gnn", -- set to `false` to disable one of the mappings
-            node_incremental = "grn",
-            scope_incremental = "grc",
-            node_decremental = "grm",
-        },
-    },
-    --]]
+local treesitter_parsers = {
+    "bash",
+    "c",
+    "cpp",
+    "diff",
+    "dockerfile",
+    "html",
+    "javascript",
+    --"latex", --gives warning about treesitter CLI
+    "lua",
+    "make",
+    "markdown",
+    "markdown_inline",
+    "python",
+    "regex",
+    "rst",
+    "rust",
+    "toml",
+    "typescript",
+    "vim",
+    "xml",
 }
 
+-- nvim 0.12 and later
+if nvim_treesitter_branch == 'main' then
+    -- main branch, current
+    require('nvim-treesitter').setup()
+    if vim.fn.executable('tree-sitter') == 1 then
+        -- installing only works with tree-sitter CLI
+        -- Install: cargo install --locked tree-sitter-cli
+        require('nvim-treesitter').install(treesitter_parsers)
+    end
+else
+    -- master branch, deprecated for nvim <= 0.11
+    require 'nvim-treesitter.configs'.setup {
+        -- A list of parser names, or "all"
+        ensure_installed = treesitter_parsers,
+
+        -- Install parsers synchronously (only applied to `ensure_installed`)
+        sync_install = false,
+
+        -- Automatically install missing parsers when entering buffer
+        -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+        auto_install = false,
+
+        highlight = {
+            -- `false` will disable the whole extension
+            enable = true,
+
+            -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+            -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+            -- Using this option may slow down your editor, and you may see some duplicate highlights.
+            -- Instead of true it can also be a list of languages
+            additional_vim_regex_highlighting = false,
+        },
+
+        --[[
+        incremental_selection = {
+            enable = true,
+            keymaps = {
+                init_selection = "gnn", -- set to `false` to disable one of the mappings
+                node_incremental = "grn",
+                scope_incremental = "grc",
+                node_decremental = "grm",
+            },
+        },
+        --]]
+    }
+end
 
 local supports_inlay_hints = vim.lsp.inlay_hint
 
