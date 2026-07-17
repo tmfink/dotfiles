@@ -317,7 +317,8 @@ if vim.g.neovide then
 
     -- clipboard copy/paste
     vim.keymap.set({ "n", "x" }, "<C-S-C>", '"+y', { desc = "Copy system clipboard" })
-    vim.keymap.set({ "n", "x" }, "<C-S-V>", ':set paste<CR>"+p:set nopaste<CR>', { desc = "Paste system clipboard (paste mode)" })
+    vim.keymap.set({ "n", "x" }, "<C-S-V>", ':set paste<CR>"+p:set nopaste<CR>', { desc = "Paste system clipboard (normal/paste mode)" })
+    vim.keymap.set({'i'}, "<C-S-V>", '<ESC>l"+Pi', {noremap = true, desc = "Paste system clipboard (insert mode)"})
     vim.cmd([[
         let g:neovide_input_use_logo = 1
         map <D-v> "+p<CR>
