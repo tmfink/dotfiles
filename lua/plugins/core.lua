@@ -1,7 +1,8 @@
 -- Add plugins:
 --[[
+-- Something for Subversion?
 Plug('juneedahamed/vc.vim')
-Plug('renerocksai/telekasten.nvim')
+
 Plug('nvim-lualine/lualine.nvim')
 Plug('dhruvasagar/vim-table-mode')
 Plug('smoka7/hop.nvim')
@@ -172,5 +173,17 @@ return {
     -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
     -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
     lazy = false,
-  }
+  },
+
+  {
+    'renerocksai/telekasten.nvim',
+    dependencies = {'nvim-telescope/telescope.nvim'},
+    opts = {
+      -- debug = true,
+      -- Put the name of your notes directory here
+      home = vim.fn.expand("~/zettelkasten"),
+      take_over_my_home = false,
+      -- auto_set_filetype = false,
+    }
+  },
 }
