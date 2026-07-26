@@ -28,16 +28,12 @@ do
     "acwrite",
   }
 
-  local function has_prefix(str, prefix)
-    return str:sub(1, #prefix) == prefix
-  end
-
   local function ignore_trailing()
     return not vim.bo.modifiable
       or vim.list_contains(ignore_filetypes, vim.bo.filetype)
       or vim.list_contains(ignore_buftypes, vim.bo.buftype)
-      or has_prefix(vim.bo.filetype, "snacks")
-      or has_prefix(vim.bo.filetype, "noice")
+      or vim.startswith(vim.bo.filetype, "snacks")
+      or vim.startswith(vim.bo.filetype, "noice")
   end
 
   local function clear_match()
