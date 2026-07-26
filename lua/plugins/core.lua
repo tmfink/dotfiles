@@ -1,6 +1,5 @@
 -- Add plugins:
 --[[
-Plug("creativenull/efmls-configs-nvim", { ["tag"] = "v1.*" }) -- pre-configured linters and formatters for efm-langserver
 Plug('stevearc/oil.nvim')
 Plug('juneedahamed/vc.vim')
 Plug('renerocksai/telekasten.nvim')
@@ -114,5 +113,52 @@ return {
         view = "cmdline",
       },
     },
+  },
+
+  -- disable illumiate?
+  {
+    "RRethy/vim-illuminate",
+  },
+
+  {
+    "creativenull/efmls-configs-nvim",
+    version = "v1.x.x", -- version is optional, but recommended
+    dependencies = { "neovim/nvim-lspconfig" }, -- not required if using nvim >= 0.11
+    config = function()
+      local languages = require("efmls-configs.defaults").languages() -- start w/ defaults
+
+      local shellcheck = require("efmls-configs.linters.shellcheck")
+      local ruff = require("efmls-configs.linters.ruff")
+      local shfmt = require("efmls-configs.formatters.shfmt")
+
+      local sh_like = { shellcheck, shfmt }
+      languages.sh = sh_like
+      languages.bash = sh_like
+
+      local efmls_config = {
+        filetypes = vim.tbl_keys(languages),
+        settings = {
+          rootMarkers = { ".git/" },
+          languages = languages,
+        },
+        init_options = {
+          documentFormatting = true,
+          documentRangeFormatting = true,
+        },
+      }
+
+      -- If using nvim >= 0.11 then use the following
+      vim.lsp.config(
+        "efm",
+        vim.tbl_extend("force", efmls_config, {
+          cmd = { "efm-langserver" },
+
+          -- Pass your custom lsp config below like on_attach and capabilities
+          --
+          -- on_attach = on_attach,
+          -- capabilities = capabilities,
+        })
+      )
+    end,
   },
 }
