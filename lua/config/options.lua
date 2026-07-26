@@ -6,3 +6,12 @@ vim.g.snacks_animate = false
 vim.opt.clipboard = ""
 
 vim.g.autoformat = false
+
+-- mouse support
+if vim.g.neovide then
+    -- enable mouse support
+    vim.opt.mouse = "nvi"
+else
+    -- disable mouse support
+    vim.opt.mouse = ""
+end
