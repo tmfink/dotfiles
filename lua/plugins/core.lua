@@ -1,6 +1,5 @@
 -- Add plugins:
 --[[
-Plug('stevearc/oil.nvim')
 Plug('juneedahamed/vc.vim')
 Plug('renerocksai/telekasten.nvim')
 Plug('nvim-lualine/lualine.nvim')
@@ -123,7 +122,6 @@ return {
   {
     "creativenull/efmls-configs-nvim",
     version = "v1.x.x", -- version is optional, but recommended
-    dependencies = { "neovim/nvim-lspconfig" }, -- not required if using nvim >= 0.11
     config = function()
       local languages = require("efmls-configs.defaults").languages() -- start w/ defaults
 
@@ -161,4 +159,18 @@ return {
       )
     end,
   },
+
+  {
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {
+      default_file_explorer = false,
+    },
+    -- Optional dependencies
+    dependencies = { { "nvim-mini/mini.icons", opts = {} } },
+    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+    lazy = false,
+  }
 }
