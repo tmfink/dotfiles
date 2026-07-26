@@ -7,7 +7,6 @@ Plug('nvim-lualine/lualine.nvim')
 Plug('dhruvasagar/vim-table-mode')
 Plug('smoka7/hop.nvim')
 Plug('kaarmu/typst.vim')
-Plug('kaarmu/typst.vim')
 Plug('iamcco/markdown-preview.nvim', {
     ['do'] = function() vim.fn["mkdp#util#install"]() end,
     ['for'] = {'markdown', 'vim-plug'},
