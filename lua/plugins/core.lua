@@ -3,8 +3,6 @@
 -- Something for Subversion?
 Plug('juneedahamed/vc.vim')
 
-Plug('dhruvasagar/vim-table-mode')
-Plug('smoka7/hop.nvim')
 Plug('kaarmu/typst.vim')
 Plug('iamcco/markdown-preview.nvim', {
     ['do'] = function() vim.fn["mkdp#util#install"]() end,
@@ -211,6 +209,15 @@ return {
       home = vim.fn.expand("~/zettelkasten"),
       take_over_my_home = false,
       -- auto_set_filetype = false,
+    },
+  },
+
+  {
+    "smoka7/hop.nvim",
+    version = "*",
+    opts = {
+      keys = "etovxqpdygfblzhckisuran",
+      multi_windows = true,
     },
   },
 }
