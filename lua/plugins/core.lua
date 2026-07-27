@@ -3,7 +3,6 @@
 -- Something for Subversion?
 Plug('juneedahamed/vc.vim')
 
-Plug('nvim-lualine/lualine.nvim')
 Plug('dhruvasagar/vim-table-mode')
 Plug('smoka7/hop.nvim')
 Plug('kaarmu/typst.vim')
@@ -15,6 +14,16 @@ Plug('mechatroner/rainbow_csv')
 Plug('tris203/precognition.nvim')
 Plug('m4xshen/hardtime.nvim')
 --]]
+
+-- returns index of matching item or nil if none found
+local function search_list(list, condition)
+  for i, value in ipairs(list) do
+    if condition(value) then
+      return i -- Return the index of the found item
+    end
+  end
+  return nil
+end
 
 return {
   -- add colorschemes
@@ -80,9 +89,28 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
-    opts = function()
-      return {
-        --[[add your custom lualine config here]]
+    opts = function(_, opts)
+      opts.options.theme = "powerline" -- matches lightline default
+      local ft_idx = search_list(opts.sections.lualine_c, function(x)
+        return x ~= nil and x[1] == "filetype"
+      end)
+      if ft_idx == nil then
+        vim.notify("could not find filetype in lualine_c!")
+      else
+        table.remove(opts.sections.lualine_c, ft_idx)
+      end
+
+      opts.sections.lualine_x = {
+        "lsp_status",
+        { "encoding", icons_enabled = false },
+        { "fileformat", icons_enabled = false },
+        "filetype",
+      }
+      opts.sections.lualine_y = {
+        "progress",
+      }
+      opts.sections.lualine_z = {
+        "location",
       }
     end,
   },
@@ -161,7 +189,7 @@ return {
   },
 
   {
-    'stevearc/oil.nvim',
+    "stevearc/oil.nvim",
     ---@module 'oil'
     ---@type oil.SetupOpts
     opts = {
@@ -175,14 +203,14 @@ return {
   },
 
   {
-    'renerocksai/telekasten.nvim',
-    dependencies = {'nvim-telescope/telescope.nvim'},
+    "renerocksai/telekasten.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim" },
     opts = {
       -- debug = true,
       -- Put the name of your notes directory here
       home = vim.fn.expand("~/zettelkasten"),
       take_over_my_home = false,
       -- auto_set_filetype = false,
-    }
+    },
   },
 }
