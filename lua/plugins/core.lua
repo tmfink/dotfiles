@@ -2,9 +2,6 @@
 --[[
 -- Something for Subversion?
 Plug('juneedahamed/vc.vim')
-
-Plug('tris203/precognition.nvim')
-Plug('m4xshen/hardtime.nvim')
 --]]
 
 -- returns index of matching item or nil if none found
@@ -216,4 +213,18 @@ return {
   },
 
   { "mechatroner/rainbow_csv" },
+
+  {
+    "tris203/precognition.nvim",
+    opts = {},
+    enabled = false,
+  },
+
+  {
+    "m4xshen/hardtime.nvim",
+    lazy = false,
+    dependencies = { "MunifTanjim/nui.nvim" },
+    opts = {},
+    enabled = false,
+  },
 }
