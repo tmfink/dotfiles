@@ -3,12 +3,6 @@
 -- Something for Subversion?
 Plug('juneedahamed/vc.vim')
 
-Plug('kaarmu/typst.vim')
-Plug('iamcco/markdown-preview.nvim', {
-    ['do'] = function() vim.fn["mkdp#util#install"]() end,
-    ['for'] = {'markdown', 'vim-plug'},
-})
-Plug('mechatroner/rainbow_csv')
 Plug('tris203/precognition.nvim')
 Plug('m4xshen/hardtime.nvim')
 --]]
@@ -220,4 +214,6 @@ return {
       multi_windows = true,
     },
   },
+
+  { "mechatroner/rainbow_csv" },
 }
