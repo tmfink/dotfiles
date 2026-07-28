@@ -123,12 +123,28 @@ return {
 
   {
     "folke/noice.nvim",
-    opts = {
-      cmdline = {
+    -- opts = {
+    --   cmdline = {
+    --     -- classic cmdline view instead of a popup
+    --     view = "cmdline",
+    --   },
+    -- },
+    opts = function(_, opts)
+      opts.cmdline = {
         -- classic cmdline view instead of a popup
         view = "cmdline",
-      },
-    },
+      }
+      -- disable annoying messages like "6 lines yanked"
+      table.insert(opts.routes, {
+        filter = {
+          event = "msg_show",
+          kind = "", -- or `kind = ""`
+        },
+        opts = {
+          skip = true,
+        },
+      })
+    end,
   },
 
   -- disable illumiate?

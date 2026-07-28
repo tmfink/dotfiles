@@ -7,6 +7,13 @@
 -- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
 -- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
 
+local function set_space_indent(width)
+  vim.bo.expandtab = true
+  vim.bo.ts = width
+  vim.bo.sw = width
+  vim.bo.softtabstop = width
+end
+
 -- show trailing whitespace, ignoring special buffers
 do
   local hl_group = "ExtraWhitespace"
@@ -50,10 +57,7 @@ do
       return
     end
 
-    vim.w.trailing_ws_match = vim.fn.matchadd(
-      hl_group,
-      [[\s\+$]]
-    )
+    vim.w.trailing_ws_match = vim.fn.matchadd(hl_group, [[\s\+$]])
   end
 
   vim.api.nvim_set_hl(0, hl_group, {
@@ -69,16 +73,38 @@ do
     "WinEnter",
     "InsertLeave",
   }, {
-      group = group,
-      callback = show_match,
-    })
+    group = group,
+    callback = show_match,
+  })
 
   vim.api.nvim_create_autocmd({
     "InsertEnter",
     "BufWinLeave",
     "WinLeave",
   }, {
-      group = group,
-      callback = clear_match,
-    })
+    group = group,
+    callback = clear_match,
+  })
 end
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+  pattern = "*.mir",
+  callback = function()
+    vim.bo.syntax = "rust"
+    set_space_indent(4)
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+  pattern = { "*.rs", "*.py", "Cargo.toml*", "Cargo.lock" },
+  callback = function()
+    set_space_indent(4)
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+  pattern = { "*.ts", "*.js", "*.css", "*.json" },
+  callback = function()
+    set_space_indent(2)
+  end,
+})
