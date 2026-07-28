@@ -12,4 +12,4 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 
 -- toggle symbol outline
--- vim.keymap.set("n", "<leader>so", ":Outline<CR>", { desc = "Toggle Outline" })
+vim.keymap.set("n", "<leader>so", ":Outline<CR>", { desc = "Toggle Outline" })
