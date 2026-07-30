@@ -19,3 +19,7 @@ if vim.lsp.inlay_hint then
   Snacks.toggle.inlay_hints():map("<leader>h")
   Snacks.toggle.inlay_hints():map("<leader>i")
 end
+
+local builtin = require("telescope.builtin")
+vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Find buffers" })
+vim.keymap.set("n", "<leader>tb", builtin.buffers, { desc = "Find buffers" })
