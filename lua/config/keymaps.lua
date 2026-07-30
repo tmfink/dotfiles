@@ -13,3 +13,9 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 
 -- toggle symbol outline
 vim.keymap.set("n", "<leader>so", ":Outline<CR>", { desc = "Toggle Outline" })
+
+-- toggle inlay hints
+if vim.lsp.inlay_hint then
+  Snacks.toggle.inlay_hints():map("<leader>h")
+  Snacks.toggle.inlay_hints():map("<leader>i")
+end

@@ -243,4 +243,18 @@ return {
     opts = {},
     enabled = false,
   },
+
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        ["*"] = {
+          keys = {},
+        },
+        pyright = {
+          mason = false,
+        },
+      },
+    },
+  },
 }

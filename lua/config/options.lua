@@ -2,6 +2,8 @@
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
 
+I = vim.inspect
+
 vim.opt.clipboard = ""
 vim.opt.showcmd = false
 
@@ -85,5 +87,26 @@ if vim.g.neovide then
 end
 
 -- Make "set list" more useful.
-vim.opt.listchars:append('tab:^-')
-vim.opt.listchars:append('trail:`')
+vim.opt.listchars:append("tab:^-")
+vim.opt.listchars:append("trail:`")
+
+local supports_inlay_hints = vim.lsp.inlay_hint
+
+-- Workaround for slow LSP (such as rust-analyzer) that does not provide inlay
+-- hints by the time `on_attach` is called.
+-- Based on:
+-- https://github.com/mrcjkb/rustaceanvim/blob/a73e8618d8518b2a7434e1c21e4da4e66f21f738/lua/rustaceanvim/server_status.lua#L14
+if supports_inlay_hints then
+  local M = {}
+  vim.lsp.handlers["experimental/serverStatus"] = function(_, result, ctx, _)
+    --print('Received serverStatus notification:', vim.inspect(result))
+    if result.quiescent and not M.ran_once then
+      for _, bufnr in ipairs(vim.lsp.get_buffers_by_client_id(ctx.client_id)) do
+        --print('serverStatus: flushing inlay')
+        vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
+        vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+      end
+      M.ran_once = true
+    end
+  end
+end
