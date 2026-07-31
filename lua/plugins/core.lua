@@ -8,6 +8,8 @@ local function search_list(list, condition)
   return nil
 end
 
+local Snacks = require("snacks")
+
 return {
   -- add colorschemes
   { "ellisonleao/gruvbox.nvim" },
@@ -239,11 +241,59 @@ return {
   },
 
   {
+    "rachartier/tiny-code-action.nvim",
+    dependencies = {
+      -- { "nvim-telescope/telescope.nvim" },
+      {
+        "folke/snacks.nvim",
+        opts = {
+          terminal = {},
+        },
+      },
+    },
+    event = "LspAttach",
+    opts = {
+      picker = "snacks",
+      -- picker = "telescope",
+    },
+  },
+
+  {
     "neovim/nvim-lspconfig",
+    dependencies = {
+      "rachartier/tiny-code-action.nvim",
+    },
     opts = {
       servers = {
         ["*"] = {
-          keys = {},
+          keys = {
+            { "<F2>", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
+            {
+              "<F3>",
+              function()
+                vim.lsp.buf.format({ async = true })
+              end,
+              desc = "Format file",
+            },
+            {
+              "<F4>",
+              function()
+                require("tiny-code-action").code_action()
+              end,
+              desc = "Code Action",
+              mode = { "n", "x" },
+              has = "codeAction",
+            },
+            {
+              "g.",
+              function()
+                require("tiny-code-action").code_action()
+              end,
+              desc = "Code Action",
+              mode = { "n", "x" },
+              has = "codeAction",
+            },
+          },
         },
         pyright = {
           mason = false,
