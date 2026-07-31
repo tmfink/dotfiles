@@ -1,9 +1,3 @@
--- Add plugins:
---[[
--- Something for Subversion?
-Plug('juneedahamed/vc.vim')
---]]
-
 -- returns index of matching item or nil if none found
 local function search_list(list, condition)
   for i, value in ipairs(list) do
@@ -254,6 +248,34 @@ return {
         pyright = {
           mason = false,
         },
+      },
+    },
+  },
+
+  {
+    "saghen/blink.cmp",
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
+    opts = {
+      completion = {
+        keyword = { range = "full" },
+        ghost_text = {
+          enabled = true,
+        },
+      },
+      keymap = {
+        preset = "none",
+        ["<C-e>"] = { "show", "hide", "fallback" },
+        ["<C-n>"] = { "select_next", "fallback_to_mappings" },
+        ["<C-p>"] = { "select_prev", "fallback_to_mappings" },
+        ["<C-y>"] = { "accept", "fallback" },
+
+        ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+        ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+        ["<C-u>"] = { "scroll_documentation_up", "fallback" },
+        ["<C-d>"] = { "scroll_documentation_down", "fallback" },
+
+        ["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
       },
     },
   },
