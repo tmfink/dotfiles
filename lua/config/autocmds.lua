@@ -108,3 +108,11 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
     set_space_indent(2)
   end,
 })
+
+-- vim help split vertical
+vim.cmd([[
+augroup vimrc_help
+  autocmd!
+  autocmd BufEnter *.txt if &buftype == 'help' | wincmd L | endif
+augroup END
+]])
