@@ -329,4 +329,13 @@ return {
       },
     },
   },
+
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    optional = true,
+    opts = {
+      -- upstream default (gpt-5-mini) leaks agent tool request/result JSON
+      model = "claude-sonnet-5",
+    },
+  },
 }

@@ -5,7 +5,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   if vim.v.shell_error ~= 0 then
     vim.api.nvim_echo({
       { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-      { out, "WarningMsg" },
+      { out,                            "WarningMsg" },
       { "\nPress any key to exit..." },
     }, true, {})
     vim.fn.getchar()
@@ -14,7 +14,8 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({
+--- @type LazyConfig
+local lazy_config = {
   spec = {
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
@@ -34,7 +35,7 @@ require("lazy").setup({
   checker = {
     enabled = true, -- check for plugin updates periodically
     notify = false, -- notify on update
-  }, -- automatically check for plugin updates
+  },                -- automatically check for plugin updates
   performance = {
     rtp = {
       -- disable some rtp plugins
@@ -50,4 +51,15 @@ require("lazy").setup({
       },
     },
   },
-})
+}
+
+-- Allow untracked lua/config/local.lua to modify the lazy config.
+-- It should return a function(cfg) that returns a LazyConfig
+-- (optionally taking the input config, modifying it, and returning it).
+local ok, local_fn = pcall(require, "config.local")
+if ok and type(local_fn) == "function" then
+  --- @cast local_fn fun(cfg: LazyConfig): LazyConfig
+  lazy_config = local_fn(lazy_config)
+end
+
+require("lazy").setup(lazy_config)
