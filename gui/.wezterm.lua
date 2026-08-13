@@ -48,6 +48,8 @@ config.inactive_pane_hsb = {
     brightness = 0.7, -- default 0.8
 }
 
+config.enable_kitty_keyboard = true
+
 -- https://wezterm.org/config/keys.html
 -- Show defaults: wezterm show-keys --lua
 
