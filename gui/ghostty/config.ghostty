@@ -1,0 +1,78 @@
+# https://ghostty.org/docs/config
+cursor-style = block
+shell-integration = none
+theme = GitHub Dark
+
+# fix w/ tmux
+term = xterm-256color
+
+# Window size
+window-width = 120
+window-height = 28
+
+# Font
+font-size = 15
+font-family = FiraMono Nerd Font
+
+# Disable ligatures
+font-feature = -calt
+font-feature = -clig
+font-feature = -liga
+
+# Unfocused split
+unfocused-split-opacity = 0.7
+
+split-divider-color = 505050
+
+### Keybinds
+
+# fix Ctrl-[ in bash vi mode
+keybind = ctrl+left_bracket=text:\x1b
+keybind = ctrl+shift+i=prompt_tab_title
+keybind = shift+super+i=prompt_tab_title
+
+# Tabs
+keybind = super+left=previous_tab
+keybind = super+right=next_tab
+keybind = shift+super+left=move_tab:-1
+keybind = shift+super+right=move_tab:1
+keybind = shift+super+i=prompt_tab_title
+keybind = ctrl+shift+i=prompt_tab_title
+
+# Window
+keybind = f11=toggle_fullscreen
+
+# Split zoom
+keybind = ctrl+shift+z=toggle_split_zoom
+
+# Splits - tmux-like (% = shift+5, " = shift+apostrophe)
+keybind = ctrl+shift+five=new_split:right
+keybind = ctrl+shift+apostrophe=new_split:down
+
+# Splits - terminator-like
+keybind = ctrl+shift+o=new_split:right
+keybind = ctrl+shift+e=new_split:down
+
+# Pane focus - arrows
+keybind = ctrl+shift+left=goto_split:left
+keybind = ctrl+shift+right=goto_split:right
+keybind = ctrl+shift+up=goto_split:up
+keybind = ctrl+shift+down=goto_split:down
+
+# Pane focus - vi keys
+keybind = ctrl+shift+h=goto_split:left
+keybind = ctrl+shift+l=goto_split:right
+keybind = ctrl+shift+k=goto_split:up
+keybind = ctrl+shift+j=goto_split:down
+
+# Pane resize - arrows
+keybind = ctrl+shift+alt+left=resize_split:left,15
+keybind = ctrl+shift+alt+right=resize_split:right,15
+keybind = ctrl+shift+alt+up=resize_split:up,15
+keybind = ctrl+shift+alt+down=resize_split:down,15
+
+# Pane resize - vi keys
+keybind = ctrl+shift+alt+h=resize_split:left,15
+keybind = ctrl+shift+alt+l=resize_split:right,15
+keybind = ctrl+shift+alt+k=resize_split:up,15
+keybind = ctrl+shift+alt+j=resize_split:down,15
