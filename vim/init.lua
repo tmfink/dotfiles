@@ -136,7 +136,6 @@ if plug_installed then
   if enable_ai then
     Plug('zbirenbaum/copilot.lua')
     Plug('CopilotC-Nvim/CopilotChat.nvim', { ['branch'] = 'main' })
-    Plug('NickvanDyke/opencode.nvim')
   end
 
   Plug('folke/which-key.nvim')
@@ -804,12 +803,6 @@ if enable_ai then
     debug = true,     -- Enable debugging
     -- See Configuration section for rest
   }
-
-  -- opencode keymaps (grouped under <leader>a)
-  vim.keymap.set({ "n", "x" }, "<leader>aa", function() require("opencode").ask("@this: ", { submit = true }) end,
-    { desc = "AI: Ask opencode" })
-  vim.keymap.set({ "n", "x" }, "<leader>as", require("opencode").select, { desc = "AI: Select Action" })
-  vim.keymap.set({ "n", "t" }, "<leader>at", require("opencode").toggle, { desc = "AI: Toggle Window" })
 end
 
 if has_conform then
