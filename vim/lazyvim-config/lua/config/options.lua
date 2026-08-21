@@ -110,3 +110,13 @@ if supports_inlay_hints then
     end
   end
 end
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = "*",
+  callback = function(args)
+    -- workaround for issue when opening py script without ".py" extension and syntax is not enabled
+    if vim.bo[args.buf].buftype == "" and vim.bo[args.buf].filetype == "python" and vim.bo[args.buf].syntax == "" then
+      vim.bo[args.buf].syntax = "python"
+    end
+  end,
+})
