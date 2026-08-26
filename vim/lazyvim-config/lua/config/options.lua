@@ -114,9 +114,14 @@ end
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "*",
   callback = function(args)
-    -- workaround for issue when opening py script without ".py" extension and syntax is not enabled
-    if vim.bo[args.buf].buftype == "" and vim.bo[args.buf].filetype == "python" and vim.bo[args.buf].syntax == "" then
-      vim.bo[args.buf].syntax = "python"
+    -- workaround for issue when opening some files with ft set but not syntax
+    if vim.bo[args.buf].buftype ~= "" then
+      return
+    end
+    for _, ft in ipairs({ "python", "rust" }) do
+      if vim.bo[args.buf].filetype == ft and vim.bo[args.buf].syntax == "" then
+        vim.bo[args.buf].syntax = ft
+      end
     end
   end,
 })
