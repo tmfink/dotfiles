@@ -5,7 +5,7 @@
 I = vim.inspect
 
 vim.opt.clipboard = ""
-vim.opt.conceallevel = 2
+vim.opt.conceallevel = 0
 vim.opt.showcmd = false
 
 vim.g.autoformat = false
